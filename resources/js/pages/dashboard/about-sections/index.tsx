@@ -1140,6 +1140,39 @@ export default function AboutSectionsPage({
                       />
                     </div>
 
+                    {/* Image Upload Controls */}
+                    <div className="border-t pt-6 mt-6">
+                      <h3 className="text-lg font-semibold mb-4">Section Images</h3>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                          <Label htmlFor="philosophy_image">Philosophy Image</Label>
+                          <p className="text-sm text-muted-foreground mb-2">The main portrait image in the philosophy section</p>
+                          <Input
+                            id="philosophy_image"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                corporateForm.setData("philosophy_image", file);
+                              }
+                            }}
+                            className="mt-1"
+                          />
+                          {settings?.corporate_journey?.philosophy_image && (
+                            <div className="mt-2">
+                              <img
+                                src={settings.corporate_journey.philosophy_image}
+                                alt="Philosophy"
+                                className="h-24 object-contain rounded"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
                     <Button type="submit" disabled={corporateForm.processing}>
                       {corporateForm.processing ? 'Saving...' : 'Save Corporate Settings'}
                     </Button>

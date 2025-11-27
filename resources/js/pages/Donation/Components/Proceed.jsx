@@ -2,37 +2,15 @@ import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 
 const Proceed = ({ donation, pageSettings }) => {
-  const [selected, setSelected] = useState(null);
   const [selectedAccount, setSelectedAccount] = useState("user");
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const paymentMethods = [
-    {
-      id: "bkash",
-      name: "BKash",
-      description: "Pay from your bKash account",
-      img: "/assets/donation/bkash.svg",
-    },
-    {
-      id: "rocket",
-      name: "Rocket",
-      description: "Pay from your Rocket account",
-      img: "/assets/donation/rocket.svg",
-    },
-    {
-      id: "nagad",
-      name: "Nagad",
-      description: "Pay from your Nagad account",
-      img: "/assets/donation/nagad.svg",
-    },
-    {
-      id: "visa",
-      name: "Visa",
-      description: "Pay using credit/debit card",
-      img: "/assets/donation/visa.svg",
-    },
-  ];
+  const [formData, setFormData] = useState({
+    name: "",
+    mobile: "",
+    email: "",
+    message: "",
+  });
 
   // Calculate progress - parse amounts as numbers to handle decimal strings from backend
   const goalAmount = parseFloat(donation?.goal_amount) || 0;
@@ -139,7 +117,7 @@ const Proceed = ({ donation, pageSettings }) => {
               </div>
 
               {/* Donation Amount Selection */}
-              <div className="flex space-x-4">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {[50, 100, 200, 300].map((amount) => (
                   <button
                     key={amount}
@@ -158,30 +136,55 @@ const Proceed = ({ donation, pageSettings }) => {
               <div className="space-y-4 mt-4">
                 <input
                   type="text"
-                  placeholder="Grant Amount"
+                  placeholder="Custom Amount ($)"
                   value={selectedAmount || ""}
                   onChange={(e) => setSelectedAmount(e.target.value)}
                   className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
                 />
 
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
-                />
+                {selectedAccount === "user" && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Your Name *"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
+                    />
 
-                <input
-                  type="number"
-                  placeholder="Mobile Number"
-                  className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
-                />
+                    <input
+                      type="email"
+                      placeholder="Email Address *"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
+                    />
+
+                    <input
+                      type="tel"
+                      placeholder="Mobile Number"
+                      value={formData.mobile}
+                      onChange={(e) => setFormData({...formData, mobile: e.target.value})}
+                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
+                    />
+
+                    <textarea
+                      placeholder="Message (Optional)"
+                      value={formData.message}
+                      onChange={(e) => setFormData({...formData, message: e.target.value})}
+                      rows={3}
+                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900 resize-none"
+                    />
+                  </>
+                )}
 
                 <div className="flex items-center justify-center">
                   <button
-                    className="bg-[#2E5AFF] text-white rounded-lg font-semibold px-8 py-2"
+                    className="bg-[#2E5AFF] text-white rounded-lg font-semibold px-8 py-3 w-full hover:bg-blue-700 transition"
                     onClick={() => setIsModalOpen(true)}
+                    disabled={!selectedAmount}
                   >
-                    Donate
+                    Submit Donation Interest
                   </button>
                 </div>
               </div>
@@ -190,54 +193,43 @@ const Proceed = ({ donation, pageSettings }) => {
         </div>
       </div>
 
-      {/* MODAL */}
+      {/* Thank You Modal */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-slate-100 bg-opacity-20 transition-opacity duration-300 z-50"
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 z-50"
           onClick={() => setIsModalOpen(false)} 
         >
           <div
-            className="bg-white rounded-lg p-6 max-w-2xl text-center shadow-lg transform transition-all duration-300 scale-95 sm:scale-100"
+            className="bg-white rounded-2xl p-8 max-w-md text-center shadow-xl transform transition-all duration-300 scale-95 sm:scale-100 mx-4"
             onClick={(e) => e.stopPropagation()} 
           >
-            <h2 className="text-lg font-semibold mb-4">Payment Information</h2>
-            <div className="grid grid-cols-2 gap-4">
-              {paymentMethods.map((method) => (
-                <label
-                  key={method.id}
-                  className={`flex items-center p-4 border rounded-lg cursor-pointer ${
-                    selected === method.id
-                      ? "border-blue-500 bg-blue-100"
-                      : "border-gray-300"
-                  }`}
-                  onClick={() => setSelected(method.id)}
-                >
-                  <input type="radio" name="payment" className="hidden" />
-                  <img
-                    src={method.img}
-                    alt={method.name}
-                    className="w-12 h-12 object-contain mr-4"
-                  />
-                  <div>
-                    <p className="font-medium">{method.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {method.description}
-                    </p>
-                  </div>
-                </label>
-              ))}
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-            <div className="flex justify-end mt-6 space-x-4">
-              <button
-                className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg">
-                Next
-              </button>
-            </div>
+            
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Thank You!</h2>
+            <p className="text-slate-600 mb-6">
+              Your donation interest of <span className="font-semibold text-blue-600">${selectedAmount}</span> has been received. 
+              We will contact you shortly with payment details.
+            </p>
+            
+            {selectedAccount === "user" && formData.name && (
+              <div className="bg-slate-50 rounded-xl p-4 mb-6 text-left">
+                <h3 className="font-semibold text-slate-900 mb-2">Your Details:</h3>
+                <p className="text-slate-700 text-sm">Name: {formData.name}</p>
+                {formData.email && <p className="text-slate-700 text-sm">Email: {formData.email}</p>}
+                {formData.mobile && <p className="text-slate-700 text-sm">Mobile: {formData.mobile}</p>}
+              </div>
+            )}
+
+            <button
+              className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition w-full"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
