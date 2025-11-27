@@ -23,7 +23,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Pencil, Trash2, Plus, GripVertical } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface TravelCountry {
@@ -176,10 +176,8 @@ export default function AboutSectionsTravel({ settings, travelCountries }: Props
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-12"></TableHead>
                                         <TableHead>Flag</TableHead>
                                         <TableHead>Country Name</TableHead>
-                                        <TableHead>Order</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
@@ -187,16 +185,13 @@ export default function AboutSectionsTravel({ settings, travelCountries }: Props
                                 <TableBody>
                                     {travelCountries.length === 0 ? (
                                         <TableRow>
-                                            <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                                            <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                                                 No countries found. Add your first one!
                                             </TableCell>
                                         </TableRow>
                                     ) : (
                                         travelCountries.map((country) => (
                                             <TableRow key={country.id}>
-                                                <TableCell>
-                                                    <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
-                                                </TableCell>
                                                 <TableCell>
                                                     {(country.flag_url || country.flag_image) && (
                                                         <img
@@ -207,7 +202,6 @@ export default function AboutSectionsTravel({ settings, travelCountries }: Props
                                                     )}
                                                 </TableCell>
                                                 <TableCell className="font-medium">{country.name}</TableCell>
-                                                <TableCell>{country.order}</TableCell>
                                                 <TableCell>
                                                     <Badge variant={country.is_active ? "default" : "secondary"}>
                                                         {country.is_active ? "Active" : "Inactive"}

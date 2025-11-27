@@ -17,7 +17,6 @@ export default function CreateTravelCountry() {
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         flag_image: null as File | null,
-        order: 0,
         is_active: true,
     });
 
@@ -96,17 +95,6 @@ export default function CreateTravelCountry() {
                                             />
                                         </div>
                                     )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="order">Order</Label>
-                                    <Input
-                                        id="order"
-                                        type="number"
-                                        value={data.order}
-                                        onChange={(e) => setData("order", parseInt(e.target.value) || 0)}
-                                        className="mt-1"
-                                    />
                                 </div>
 
                                 <div className="flex items-center space-x-2">

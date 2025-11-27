@@ -31,7 +31,6 @@ export default function EditTravelCountry({ country }: Props) {
         _method: "PUT",
         name: country.name,
         flag_image: null as File | null,
-        order: country.order,
         is_active: country.is_active,
     });
 
@@ -110,17 +109,6 @@ export default function EditTravelCountry({ country }: Props) {
                                             />
                                         </div>
                                     )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="order">Order</Label>
-                                    <Input
-                                        id="order"
-                                        type="number"
-                                        value={data.order}
-                                        onChange={(e) => setData("order", parseInt(e.target.value) || 0)}
-                                        className="mt-1"
-                                    />
                                 </div>
 
                                 <div className="flex items-center space-x-2">

@@ -19,7 +19,7 @@ export default function CreateAward() {
     description: '',
     organization: '',
     image: null as File | null,
-    award_date: '',
+    award_date: new Date().toISOString().split('T')[0],
     order: 0,
   })
 
