@@ -56,6 +56,8 @@ class DatabaseSeeder extends Seeder
             VideosPageSettingSeeder::class,
             LifeEventsPageSettingSeeder::class,
             BookBannerSlideSeeder::class,
+            // Chart Data Seeder - adds historical data for dashboard charts
+            ChartDataSeeder::class,
         ]);
     }
 }
