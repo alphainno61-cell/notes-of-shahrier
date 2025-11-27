@@ -58,7 +58,7 @@ export default function VideosPageSettingsContent({ settings }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="all_videos_title">All Videos Section Title</Label>
+                                    <Label htmlFor="all_videos_title">All Videos Section</Label>
                                     <Input
                                         id="all_videos_title"
                                         value={data.all_videos_title}
@@ -68,7 +68,7 @@ export default function VideosPageSettingsContent({ settings }: Props) {
                                     />
                                 </div>
 
-                                <div>
+                                {/* <div>
                                     <Label htmlFor="all_videos_description">All Videos Section Description</Label>
                                     <Input
                                         id="all_videos_description"
@@ -77,10 +77,10 @@ export default function VideosPageSettingsContent({ settings }: Props) {
                                         placeholder="Browse through all my video content"
                                         className="mt-1"
                                     />
-                                </div>
+                                </div> */}
 
                                 <div>
-                                    <Label htmlFor="short_videos_title">Short Videos Section Title</Label>
+                                    <Label htmlFor="short_videos_title">Short Videos Section</Label>
                                     <Input
                                         id="short_videos_title"
                                         value={data.short_videos_title}
@@ -90,7 +90,7 @@ export default function VideosPageSettingsContent({ settings }: Props) {
                                     />
                                 </div>
 
-                                <div>
+                                {/* <div>
                                     <Label htmlFor="short_videos_description">Short Videos Section Description</Label>
                                     <Input
                                         id="short_videos_description"
@@ -99,7 +99,7 @@ export default function VideosPageSettingsContent({ settings }: Props) {
                                         placeholder="Quick clips and highlights"
                                         className="mt-1"
                                     />
-                                </div>
+                                </div> */}
                             </CardContent>
                         </Card>
 

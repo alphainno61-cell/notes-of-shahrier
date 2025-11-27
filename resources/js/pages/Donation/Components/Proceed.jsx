@@ -34,9 +34,11 @@ const Proceed = ({ donation, pageSettings }) => {
     },
   ];
 
-  // Calculate progress
-  const progress = donation?.goal_amount > 0 
-    ? (donation.raised_amount / donation.goal_amount) * 100 
+  // Calculate progress - parse amounts as numbers to handle decimal strings from backend
+  const goalAmount = parseFloat(donation?.goal_amount) || 0;
+  const raisedAmount = parseFloat(donation?.raised_amount) || 0;
+  const progress = goalAmount > 0 
+    ? (raisedAmount / goalAmount) * 100 
     : 0;
 
   return (
@@ -59,8 +61,8 @@ const Proceed = ({ donation, pageSettings }) => {
               {/* Progress section */}
               <div className="mt-6 bg-white rounded-xl p-6 shadow">
                 <div className="flex justify-between text-lg mb-3">
-                  <span className="text-slate-600">Raised: ${donation?.raised_amount?.toLocaleString() || 0}</span>
-                  <span className="text-slate-900 font-medium">Goal: ${donation?.goal_amount?.toLocaleString() || 0}</span>
+                  <span className="text-slate-600">Raised: ${raisedAmount.toLocaleString()}</span>
+                  <span className="text-slate-900 font-medium">Goal: ${goalAmount.toLocaleString()}</span>
                 </div>
                 <Progress value={progress} className="h-3" />
                 <p className="text-center mt-3 text-blue-600 font-semibold">{progress.toFixed(1)}% of goal reached</p>

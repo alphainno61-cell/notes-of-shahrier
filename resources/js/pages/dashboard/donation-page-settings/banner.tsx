@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 interface DonationPageSetting {
     id: number;
+    page_title: string | null;
     banner_quote: string | null;
     banner_subtitle: string | null;
     banner_default_image: string | null;
@@ -27,11 +28,12 @@ export default function DonationPageSettingsBanner({ settings }: Props) {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const { data, setData, post, processing, errors } = useForm({
-        banner_quote: settings?.banner_quote || "",
-        banner_subtitle: settings?.banner_subtitle || "My Thoughts",
+        page_title: settings?.page_title || "Every Contribution Counts",
+        banner_quote: settings?.banner_quote || "Help us make a positive impact in the world.",
+        banner_subtitle: settings?.banner_subtitle || "Make a Difference",
         banner_default_image: null as File | null,
-        donate_section_title: settings?.donate_section_title || "Support Our Cause",
-        donate_section_description: settings?.donate_section_description || "",
+        donate_section_title: settings?.donate_section_title || "Active Campaigns",
+        donate_section_description: settings?.donate_section_description || "Choose a cause that matters to you and make a difference today",
     });
 
     const handleSubmit = (e: FormEvent) => {
@@ -63,32 +65,48 @@ export default function DonationPageSettingsBanner({ settings }: Props) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Banner Content</CardTitle>
-                                <CardDescription>Set the banner quote and image</CardDescription>
+                                <CardDescription>Set the banner title, quote and image</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="banner_quote">Banner Quote</Label>
-                                    <Textarea
-                                        id="banner_quote"
-                                        value={data.banner_quote}
-                                        onChange={(e) => setData("banner_quote", e.target.value)}
-                                        rows={3}
+                                    <Label htmlFor="page_title">Page Title (Main Heading)</Label>
+                                    <Input
+                                        id="page_title"
+                                        value={data.page_title}
+                                        onChange={(e) => setData("page_title", e.target.value)}
+                                        placeholder="Every Contribution Counts"
                                         className="mt-1"
                                     />
+                                    <p className="text-sm text-muted-foreground mt-1">This appears as the bold main text in the banner</p>
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="banner_subtitle">Banner Subtitle</Label>
+                                    <Label htmlFor="banner_subtitle">Banner Subtitle (Small Text Above Title)</Label>
                                     <Input
                                         id="banner_subtitle"
                                         value={data.banner_subtitle}
                                         onChange={(e) => setData("banner_subtitle", e.target.value)}
+                                        placeholder="Make a Difference"
                                         className="mt-1"
                                     />
+                                    <p className="text-sm text-muted-foreground mt-1">This appears as the small text with the line decoration</p>
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="banner_default_image">Banner Image</Label>
+                                    <Label htmlFor="banner_quote">Banner Quote (Description)</Label>
+                                    <Textarea
+                                        id="banner_quote"
+                                        value={data.banner_quote}
+                                        onChange={(e) => setData("banner_quote", e.target.value)}
+                                        placeholder="Help us make a positive impact in the world."
+                                        rows={3}
+                                        className="mt-1"
+                                    />
+                                    <p className="text-sm text-muted-foreground mt-1">This appears below the main title as lighter text</p>
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="banner_default_image">Banner Image (Right Side)</Label>
                                     <Input
                                         id="banner_default_image"
                                         type="file"
@@ -104,6 +122,7 @@ export default function DonationPageSettingsBanner({ settings }: Props) {
                                         }}
                                         className="mt-1"
                                     />
+                                    <p className="text-sm text-muted-foreground mt-1">This image appears on the right side of the banner on large screens</p>
                                     {(imagePreview || settings?.banner_default_image) && (
                                         <div className="mt-4 relative w-full h-48 bg-muted rounded-md overflow-hidden">
                                             <img
@@ -120,7 +139,7 @@ export default function DonationPageSettingsBanner({ settings }: Props) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Donate Section</CardTitle>
-                                <CardDescription>Configure the donation call-to-action section</CardDescription>
+                                <CardDescription>Configure the donation campaigns listing section</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
@@ -129,8 +148,10 @@ export default function DonationPageSettingsBanner({ settings }: Props) {
                                         id="donate_section_title"
                                         value={data.donate_section_title}
                                         onChange={(e) => setData("donate_section_title", e.target.value)}
+                                        placeholder="Active Campaigns"
                                         className="mt-1"
                                     />
+                                    <p className="text-sm text-muted-foreground mt-1">Title shown above the donation cards</p>
                                 </div>
 
                                 <div>
@@ -139,9 +160,11 @@ export default function DonationPageSettingsBanner({ settings }: Props) {
                                         id="donate_section_description"
                                         value={data.donate_section_description}
                                         onChange={(e) => setData("donate_section_description", e.target.value)}
+                                        placeholder="Choose a cause that matters to you and make a difference today"
                                         rows={3}
                                         className="mt-1"
                                     />
+                                    <p className="text-sm text-muted-foreground mt-1">Description shown below the section title</p>
                                 </div>
                             </CardContent>
                         </Card>

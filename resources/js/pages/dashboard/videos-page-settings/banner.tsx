@@ -66,7 +66,7 @@ export default function VideosPageSettingsBanner({ settings }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="page_title">Page Title</Label>
+                                    <Label htmlFor="page_title">Banner Title</Label>
                                     <Input
                                         id="page_title"
                                         value={data.page_title}
@@ -77,7 +77,7 @@ export default function VideosPageSettingsBanner({ settings }: Props) {
                                     <p className="text-sm text-muted-foreground mt-1">This is the main heading displayed on the videos page</p>
                                 </div>
 
-                                <div>
+                                {/* <div>
                                     <Label htmlFor="banner_title">Banner Title</Label>
                                     <Input
                                         id="banner_title"
@@ -136,7 +136,7 @@ export default function VideosPageSettingsBanner({ settings }: Props) {
                                             />
                                         </div>
                                     )}
-                                </div>
+                                </div> */}
                             </CardContent>
                         </Card>
 

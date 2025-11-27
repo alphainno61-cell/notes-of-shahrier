@@ -32,16 +32,19 @@ const DonationList = ({ donations = [], pageSettings }) => {
     <div className="bg-slate-100 py-18">
       <div className="w-11/12 lg:w-9/12 mx-auto">
         <h2 className="text-4xl lg:text-5xl text-slate-900 font-bold mb-4 text-center">
-          {pageSettings?.section_title || 'Active Campaigns'}
+          {pageSettings?.donate_section_title || 'Active Campaigns'}
         </h2>
         <p className="text-lg text-slate-600 text-center mb-12">
-          {pageSettings?.section_description || 'Choose a cause that matters to you and make a difference today'}
+          {pageSettings?.donate_section_description || 'Choose a cause that matters to you and make a difference today'}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayDonations.map((donation) => {
-            const progress = donation.goal_amount > 0 
-              ? (donation.raised_amount / donation.goal_amount) * 100 
+            // Parse amounts as numbers to handle decimal strings from backend
+            const goalAmount = parseFloat(donation.goal_amount) || 0;
+            const raisedAmount = parseFloat(donation.raised_amount) || 0;
+            const progress = goalAmount > 0 
+              ? (raisedAmount / goalAmount) * 100 
               : 0;
 
             return (
@@ -68,8 +71,8 @@ const DonationList = ({ donations = [], pageSettings }) => {
                   
                   <div className="mb-4">
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-slate-600">Raised: ${donation.raised_amount?.toLocaleString()}</span>
-                      <span className="text-slate-900 font-medium">Goal: ${donation.goal_amount?.toLocaleString()}</span>
+                      <span className="text-slate-600">Raised: ${raisedAmount.toLocaleString()}</span>
+                      <span className="text-slate-900 font-medium">Goal: ${goalAmount.toLocaleString()}</span>
                     </div>
                     <Progress value={progress} className="h-2" />
                   </div>

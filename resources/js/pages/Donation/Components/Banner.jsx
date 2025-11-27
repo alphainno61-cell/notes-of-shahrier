@@ -11,20 +11,20 @@ const Banner = ({ pageSettings }) => {
             <div className="flex items-center gap-4 justify-center lg:justify-start mt-24 lg:mt-0">
               <div className="w-16 h-1 bg-white"></div>
               <h4 className="text-2xl lg:text-3xl font-medium text-white">
-                {pageSettings?.banner_title || 'Make a Difference'}
+                {pageSettings?.banner_subtitle || 'Make a Difference'}
               </h4>
             </div>
             <h1 className="text-3xl lg:text-5xl text-white font-semibold mt-4 leading-relaxed">
-              <strong>{pageSettings?.banner_subtitle || '"Every Contribution Counts"'}</strong> – <br />
+              <strong>{pageSettings?.page_title || '"Every Contribution Counts"'}</strong> – <br />
               <span className="font-light">
-                {pageSettings?.banner_description || 'Help us make a positive impact in the world.'}
+                {pageSettings?.banner_quote || 'Help us make a positive impact in the world.'}
               </span>
             </h1>
           </div>
 
           <div className="lg:w-1/2 relative">
             <div>
-              <img src={pageSettings?.banner_image || "/assets/donation/donation_banner.png"} alt="" />
+              <img src={pageSettings?.banner_default_image || "/assets/donation/donation_banner.png"} alt="Donation Banner" className="w-full h-auto" />
             </div>
           </div>
         </div>
