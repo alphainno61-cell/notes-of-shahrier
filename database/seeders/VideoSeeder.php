@@ -49,7 +49,7 @@ class VideoSeeder extends Seeder
             [
                 'title' => 'Quick Development Tutorial',
                 'description' => 'Fast-paced modern development tutorial',
-                'video_url' => 'https://www.youtube.com/watch?v=zvvNMN-OXMM',
+                'video_url' => 'https://www.youtube.com/watch?v=Dgm_Rr5JtaU',
                 'thumbnail' => 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=360&h=640&fit=crop&crop=center',
                 'platform' => 'youtube',
                 'category' => 'Technology',
