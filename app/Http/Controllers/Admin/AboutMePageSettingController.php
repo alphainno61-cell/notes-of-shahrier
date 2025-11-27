@@ -228,12 +228,18 @@ class AboutMePageSettingController extends Controller
 
         // Handle map image upload
         if ($request->hasFile('map_image')) {
-            $path = $request->file('map_image')->store('about-me/travel', 'public');
-            $travel['map_image'] = '/storage/' . $path;
+            $filename = time() . "_travel_map." . $request->file('map_image')->getClientOriginalExtension();
+            $request->file('map_image')->move(public_path('assets/about_me/travel'), $filename);
+            $travel['map_image'] = '/assets/about_me/travel/' . $filename;
         }
 
-        $travel['title'] = $validated['title'] ?? $travel['title'] ?? '';
-        $travel['description'] = $validated['description'] ?? $travel['description'] ?? '';
+        // Use consistent field names (title, description) - migrate old field names if present
+        $travel['title'] = $validated['title'] ?? $travel['section_title'] ?? $travel['title'] ?? '';
+        $travel['description'] = $validated['description'] ?? $travel['section_subtitle'] ?? $travel['description'] ?? '';
+        
+        // Remove old field names if they exist
+        unset($travel['section_title']);
+        unset($travel['section_subtitle']);
 
         $settings->travel = $travel;
         $settings->save();

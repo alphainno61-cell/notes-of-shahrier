@@ -2,6 +2,10 @@ const Travel = ({ pageContent, travelCountries }) => {
   const travelData = pageContent?.travel || {};
   const countries = travelCountries || [];
 
+  // Support both old (section_title/section_subtitle) and new (title/description) field names
+  const sectionTitle = travelData.title || travelData.section_title || "Travel countries for business purposes";
+  const sectionDescription = travelData.description || travelData.section_subtitle || "As a global entrepreneur and technology leader, Shahriar Khan has traveled extensively for business purposes, establishing partnerships and exploring opportunities in Turkey, Canada, China, and the United States. These journeys have enriched his perspective and strengthened international collaborations.";
+
   // Default countries if none from backend
   const defaultCountries = [
     { id: 1, name: 'Turkey', flag_url: '/assets/about_me/turkey.svg' },
@@ -15,10 +19,10 @@ const Travel = ({ pageContent, travelCountries }) => {
   return (
     <div className="pt-16 bg-[#2E5AFF]">
       <h1 className="text-center font-semibold text-4xl lg:text-6xl text-white mb-6">
-        {travelData.title || "Travel countries for business purposes"}
+        {sectionTitle}
       </h1>
       <p className="text-gray-300 text-center w-11/12 lg:w-6/12 mx-auto">
-        {travelData.description || "As a global entrepreneur and technology leader, Shahriar Khan has traveled extensively for business purposes, establishing partnerships and exploring opportunities in Turkey, Canada, China, and the United States. These journeys have enriched his perspective and strengthened international collaborations."}
+        {sectionDescription}
       </p>
 
       <div className="relative">

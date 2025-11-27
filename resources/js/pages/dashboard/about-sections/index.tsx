@@ -135,8 +135,10 @@ interface AboutMePageSetting {
     image_4: string;
   };
   travel: {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
+    section_title?: string;
+    section_subtitle?: string;
     map_image: string;
   };
 }
@@ -246,11 +248,16 @@ export default function AboutSectionsPage({
   });
 
   // Impact form
-  const [impactImagePreviews, setImpactImagePreviews] = useState<{ [key: string]: string | null }>({});
+  const [impactImagePreviews, setImpactImagePreviews] = useState<{ [key: string]: string | null }>({
+    image_1: settings?.impact?.image_1 || null,
+    image_2: settings?.impact?.image_2 || null,
+    image_3: settings?.impact?.image_3 || null,
+    image_4: settings?.impact?.image_4 || null,
+  });
   const impactForm = useForm({
-    entrepreneur_title: settings?.impact?.entrepreneur_title || 'Entrepreneur Impact',
+    entrepreneur_title: settings?.impact?.entrepreneur_title || '',
     entrepreneur_description: settings?.impact?.entrepreneur_description || '',
-    technology_title: settings?.impact?.technology_title || 'Technology Impact',
+    technology_title: settings?.impact?.technology_title || '',
     technology_description: settings?.impact?.technology_description || '',
     image_1: null as File | null,
     image_2: null as File | null,
@@ -315,10 +322,10 @@ export default function AboutSectionsPage({
   };
 
   // Travel form
-  const [travelMapPreview, setTravelMapPreview] = useState<string | null>(null);
+  const [travelMapPreview, setTravelMapPreview] = useState<string | null>(settings?.travel?.map_image || null);
   const travelForm = useForm({
-    title: settings?.travel?.title || '',
-    description: settings?.travel?.description || '',
+    title: settings?.travel?.section_title || settings?.travel?.title || '',
+    description: settings?.travel?.section_subtitle || settings?.travel?.description || '',
     map_image: null as File | null,
   });
 
@@ -759,9 +766,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="entrepreneur_description">Description</Label>
                         <Textarea
                           id="entrepreneur_description"
-                          value={impactForm.data.entrepreneur_description}
+                          value={impactForm.data.entrepreneur_description || "As a visionary entrepreneur, Shahriar Khan has pioneered multiple successful ventures including Nexkraft LTD, Nexfly, Mechanix, and NexAcademy. His leadership has driven innovation in event planning, education technology, and digital solutions, creating jobs and fostering economic growth in Bangladesh and beyond."}
                           onChange={(e) => impactForm.setData("entrepreneur_description", e.target.value)}
-                          placeholder="As a visionary entrepreneur..."
+                          // placeholder="As a visionary entrepreneur..."
                           rows={4}
                           className="mt-1"
                         />
@@ -785,9 +792,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="technology_description">Description</Label>
                         <Textarea
                           id="technology_description"
-                          value={impactForm.data.technology_description}
+                          value={impactForm.data.technology_description || "Shahriar Khan has been at the forefront of technological advancement, specializing in AI-driven solutions, cloud-based systems, and cybersecurity. His expertise spans research and development, user experience design, and digital transformation strategies that have revolutionized how businesses operate in the modern digital landscape."}
                           onChange={(e) => impactForm.setData("technology_description", e.target.value)}
-                          placeholder="Shahriar Khan has been at the forefront..."
+                          // placeholder="Shahriar Khan has been at the forefront..."
                           rows={4}
                           className="mt-1"
                         />
@@ -808,10 +815,10 @@ export default function AboutSectionsPage({
                               onChange={(e) => handleImpactImageChange(`image_${num}`, e.target.files?.[0])}
                               className="mt-1"
                             />
-                            {(impactImagePreviews[`image_${num}`] || settings?.impact?.[`image_${num}` as keyof typeof settings.impact]) && (
+                            {impactImagePreviews[`image_${num}`] && (
                               <div className="mt-2">
                                 <img
-                                  src={impactImagePreviews[`image_${num}`] || settings?.impact?.[`image_${num}` as keyof typeof settings.impact]}
+                                  src={impactImagePreviews[`image_${num}`] || ''}
                                   alt={`Image ${num}`}
                                   className="h-24 object-contain rounded"
                                 />
@@ -914,9 +921,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="travel_title">Section Title</Label>
                         <Input
                           id="travel_title"
-                          value={travelForm.data.title}
+                          value={travelForm.data.title || "Travel countries for business purposes"}
                           onChange={(e) => travelForm.setData("title", e.target.value)}
-                          placeholder="Travel countries for business purposes"
+                          // placeholder="Travel countries for business purposes"
                           className="mt-1"
                         />
                       </div>
@@ -924,9 +931,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="travel_description">Description</Label>
                         <Textarea
                           id="travel_description"
-                          value={travelForm.data.description}
+                          value={travelForm.data.description || "As a global entrepreneur and technology leader, Shahriar Khan has traveled extensively for business purposes, establishing partnerships and exploring opportunities in Turkey, Canada, China, and the United States."}
                           onChange={(e) => travelForm.setData("description", e.target.value)}
-                          placeholder="As a global entrepreneur and technology leader..."
+                          // placeholder="As a global entrepreneur and technology leader..."
                           rows={4}
                           className="mt-1"
                         />
@@ -951,7 +958,7 @@ export default function AboutSectionsPage({
                         {(travelMapPreview || settings?.travel?.map_image) && (
                           <div className="mt-2">
                             <img
-                              src={travelMapPreview || settings?.travel?.map_image}
+                              src={travelMapPreview || settings?.travel?.map_image || ''}
                               alt="Map Preview"
                               className="h-32 object-contain rounded"
                             />
