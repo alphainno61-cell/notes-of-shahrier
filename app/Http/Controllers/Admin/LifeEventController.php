@@ -21,6 +21,12 @@ class LifeEventController extends Controller
         return Inertia::render('dashboard/life-events/create');
     }
 
+    public function show(string $id)
+    {
+        $lifeEvent = LifeEvent::findOrFail($id);
+        return Inertia::render('dashboard/life-events/edit', ['lifeEvent' => $lifeEvent]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

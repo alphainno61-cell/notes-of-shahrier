@@ -125,7 +125,7 @@ const Navbar = () => {
                 href="/donations"
                 onClick={toggleDrawer}
                 className={
-                  location.pathname === "/donation"
+                  location.pathname === "/donations"
                     ? "text-blue-500 font-bold"
                     : "text-black hover:text-blue-500"
                 }

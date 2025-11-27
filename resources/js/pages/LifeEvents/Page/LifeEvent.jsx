@@ -7,7 +7,7 @@ const LifeEvent = ({ lifeEvents, categories, settings }) => {
     <div>
       <Navbar />
       <Banner settings={settings} />
-      <Category lifeEvents={lifeEvents} categories={categories} />
+      <Category lifeEvents={lifeEvents} categories={categories} settings={settings} />
     </div>
   );
 };

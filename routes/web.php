@@ -42,7 +42,7 @@ Route::get('/books', [BookController::class, 'index'])->name('books');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/donate-details/{id}', [DonationController::class, 'show'])->name('donate-details');
-Route::get('/donation', [DonationController::class, 'index'])->name('donation');
+Route::get('/donations', [DonationController::class, 'index'])->name('donations');
 Route::get('/entrepreneurship', [EntrepreneurshipController::class, 'index'])->name('entrepreneurship');
 Route::get('/events', [EventController::class, 'index'])->name('events');
 Route::get('/life-events', [LifeEventController::class, 'index'])->name('life-events');
