@@ -48,7 +48,7 @@ const DonationList = ({ donations = [], pageSettings }) => {
               : 0;
 
             return (
-              <Card key={donation.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+              <Card key={donation.id} className="overflow-hidden hover:shadow-lg transition-shadow p-0!">
                 <div className="relative h-48">
                   <img
                     src={donation.image || "/assets/donation/donate_card1.png"}
