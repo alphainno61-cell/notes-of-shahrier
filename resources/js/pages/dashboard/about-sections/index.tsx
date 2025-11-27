@@ -766,9 +766,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="entrepreneur_description">Description</Label>
                         <Textarea
                           id="entrepreneur_description"
-                          value={impactForm.data.entrepreneur_description || "As a visionary entrepreneur, Shahriar Khan has pioneered multiple successful ventures including Nexkraft LTD, Nexfly, Mechanix, and NexAcademy. His leadership has driven innovation in event planning, education technology, and digital solutions, creating jobs and fostering economic growth in Bangladesh and beyond."}
+                          value={impactForm.data.entrepreneur_description}
                           onChange={(e) => impactForm.setData("entrepreneur_description", e.target.value)}
-                          // placeholder="As a visionary entrepreneur..."
+                          placeholder="As a visionary entrepreneur, Shahriar Khan has pioneered multiple successful ventures including Nexkraft LTD, Nexfly, Mechanix, and NexAcademy..."
                           rows={4}
                           className="mt-1"
                         />
@@ -792,9 +792,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="technology_description">Description</Label>
                         <Textarea
                           id="technology_description"
-                          value={impactForm.data.technology_description || "Shahriar Khan has been at the forefront of technological advancement, specializing in AI-driven solutions, cloud-based systems, and cybersecurity. His expertise spans research and development, user experience design, and digital transformation strategies that have revolutionized how businesses operate in the modern digital landscape."}
+                          value={impactForm.data.technology_description}
                           onChange={(e) => impactForm.setData("technology_description", e.target.value)}
-                          // placeholder="Shahriar Khan has been at the forefront..."
+                          placeholder="Shahriar Khan has been at the forefront of technological advancement, specializing in AI-driven solutions, cloud-based systems, and cybersecurity..."
                           rows={4}
                           className="mt-1"
                         />
@@ -921,9 +921,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="travel_title">Section Title</Label>
                         <Input
                           id="travel_title"
-                          value={travelForm.data.title || "Travel countries for business purposes"}
+                          value={travelForm.data.title}
                           onChange={(e) => travelForm.setData("title", e.target.value)}
-                          // placeholder="Travel countries for business purposes"
+                          placeholder="Travel countries for business purposes"
                           className="mt-1"
                         />
                       </div>
@@ -931,9 +931,9 @@ export default function AboutSectionsPage({
                         <Label htmlFor="travel_description">Description</Label>
                         <Textarea
                           id="travel_description"
-                          value={travelForm.data.description || "As a global entrepreneur and technology leader, Shahriar Khan has traveled extensively for business purposes, establishing partnerships and exploring opportunities in Turkey, Canada, China, and the United States."}
+                          value={travelForm.data.description}
                           onChange={(e) => travelForm.setData("description", e.target.value)}
-                          // placeholder="As a global entrepreneur and technology leader..."
+                          placeholder="As a global entrepreneur and technology leader, Shahriar Khan has traveled extensively for business purposes..."
                           rows={4}
                           className="mt-1"
                         />
