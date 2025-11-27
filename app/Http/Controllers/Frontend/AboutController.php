@@ -8,6 +8,8 @@ use App\Models\Award;
 use App\Models\AboutMePageSetting;
 use App\Models\CorporateJourneyItem;
 use App\Models\Associate;
+use App\Models\TravelCountry;
+use App\Models\ImpactItem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -44,6 +46,16 @@ class AboutController extends Controller
         $associates = Associate::where('is_active', true)
             ->orderBy('order')
             ->get();
+            
+        // Get travel countries
+        $travelCountries = TravelCountry::where('is_active', true)
+            ->orderBy('order')
+            ->get();
+            
+        // Get impact items
+        $impactItems = ImpactItem::where('is_active', true)
+            ->orderBy('order')
+            ->get();
 
         return Inertia::render('AboutMe/Page/AboutMe', [
             'sections' => $sections,
@@ -51,6 +63,8 @@ class AboutController extends Controller
             'pageContent' => $pageContent,
             'corporateJourney' => $corporateJourney,
             'associates' => $associates,
+            'travelCountries' => $travelCountries,
+            'impactItems' => $impactItems,
         ]);
     }
 }

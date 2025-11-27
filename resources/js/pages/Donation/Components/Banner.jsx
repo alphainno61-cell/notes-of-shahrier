@@ -5,7 +5,7 @@ const Banner = ({ pageSettings }) => {
         <img src="/assets/donation/pattern_bg.png" alt="" className="w-full" />
       </div>
 
-      <div className="bg-[#0035F9] rounded-2xl">
+      <div className="bg-[#0035F9] rounded-2xl p-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:justify-between lg:px-20">
           <div className="lg:w-1/2">
             <div className="flex items-center gap-4 justify-center lg:justify-start mt-24 lg:mt-0">

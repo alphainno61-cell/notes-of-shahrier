@@ -1,14 +1,20 @@
-const Impact = () => {
-  const allImpact = [
-    "Innovation and Product Development",
-    "Research and Development (R&D)",
-    "Cybersecurity and Data Protection",
-    "Optimization of Processes",
-    "Leadership in Digital Transformation",
-    "User Experience (UX) Design",
-    "Education and Mentorship",
-    "Ethical and Social Contributions",
+const Impact = ({ pageContent, impactItems }) => {
+  const impactData = pageContent?.impact || {};
+  const items = impactItems || [];
+
+  // Default impact items if none from backend
+  const defaultItems = [
+    { id: 1, title: "Innovation and Product Development" },
+    { id: 2, title: "Research and Development (R&D)" },
+    { id: 3, title: "Cybersecurity and Data Protection" },
+    { id: 4, title: "Optimization of Processes" },
+    { id: 5, title: "Leadership in Digital Transformation" },
+    { id: 6, title: "User Experience (UX) Design" },
+    { id: 7, title: "Education and Mentorship" },
+    { id: 8, title: "Ethical and Social Contributions" },
   ];
+
+  const displayItems = items.length > 0 ? items : defaultItems;
 
   return (
     <div
@@ -23,7 +29,7 @@ const Impact = () => {
         <div className="lg:col-span-1">
           <div className="overflow-hidden w-[460px] h-[332px]">
             <img
-              src="/assets/about_me/shahriar_khan4.png"
+              src={impactData.image_1 || "/assets/about_me/shahriar_khan4.png"}
               alt=""
               className="transition-transform duration-500 ease-in-out hover:scale-105  w-full h-full object-cover"
             />
@@ -31,7 +37,7 @@ const Impact = () => {
 
           <div className="-translate-y-28 transition-transform duration-500 hover:rotate-6 w-[460px] h-[332px]">
             <img
-              src="/assets/about_me/shahriar_khan3.png"
+              src={impactData.image_2 || "/assets/about_me/shahriar_khan3.png"}
               alt=""
               className="transition-transform duration-500 hover:scale-110 w-full h-full object-cover"
             />
@@ -40,17 +46,17 @@ const Impact = () => {
 
         <div className="lg:col-span-1 flex flex-col items-center justify-center">
           <h1 className="text-white font-semibold text-4xl lg:text-6xl mb-6">
-            Entrepreneur Impact
+            {impactData.entrepreneur_title || "Entrepreneur Impact"}
           </h1>
           <p className="font-light text-gray-300 text-lg text-center">
-            As a visionary entrepreneur, Shahriar Khan has pioneered multiple successful ventures including Nexkraft LTD, Nexfly, Mechanix, and NexAcademy. His leadership has driven innovation in event planning, education technology, and digital solutions, creating jobs and fostering economic growth in Bangladesh and beyond.
+            {impactData.entrepreneur_description || "As a visionary entrepreneur, Shahriar Khan has pioneered multiple successful ventures including Nexkraft LTD, Nexfly, Mechanix, and NexAcademy. His leadership has driven innovation in event planning, education technology, and digital solutions, creating jobs and fostering economic growth in Bangladesh and beyond."}
           </p>
         </div>
 
         <div className="lg:col-span-1 ml-20">
           <div className="overflow-hidden w-[460px] h-[332px]">
             <img
-              src="/assets/about_me/shahriar_khan2.png"
+              src={impactData.image_3 || "/assets/about_me/shahriar_khan2.png"}
               alt=""
               className="transition-transform duration-500 ease-in-out hover:scale-105 w-full h-full object-cover"
             />
@@ -58,7 +64,7 @@ const Impact = () => {
 
           <div className="-translate-y-28 transition-transform duration-500 hover:-rotate-6 w-[460px] h-[332px]">
             <img
-              src="/assets/about_me/shahriar_khan1.png"
+              src={impactData.image_4 || "/assets/about_me/shahriar_khan1.png"}
               alt=""
               className="transition-transform duration-500 hover:scale-110 w-full h-full object-cover"
             />
@@ -70,20 +76,20 @@ const Impact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
           <div className="lg:col-span-1">
             <h1 className="text-4xl lg:text-6xl font-semibold text-white mb-6">
-              Technology Impact
+              {impactData.technology_title || "Technology Impact"}
             </h1>
 
             <p className="text-gray-300">
-              Shahriar Khan has been at the forefront of technological advancement, specializing in AI-driven solutions, cloud-based systems, and cybersecurity. His expertise spans research and development, user experience design, and digital transformation strategies that have revolutionized how businesses operate in the modern digital landscape.
+              {impactData.technology_description || "Shahriar Khan has been at the forefront of technological advancement, specializing in AI-driven solutions, cloud-based systems, and cybersecurity. His expertise spans research and development, user experience design, and digital transformation strategies that have revolutionized how businesses operate in the modern digital landscape."}
             </p>
           </div>
 
           <div className="lg:col-span-2">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-              {allImpact.map((impact, index) => (
-                <div key={index}>
+              {displayItems.map((item) => (
+                <div key={item.id}>
                   <div className="bg-slate-900 py-8 px-4 rounded-xl">
-                    <p className="text-white text-center">{impact}</p>
+                    <p className="text-white text-center">{item.title}</p>
                   </div>
                 </div>
               ))}

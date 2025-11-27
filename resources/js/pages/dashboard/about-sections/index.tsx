@@ -298,6 +298,7 @@ export default function AboutSectionsPage({
                         value={bannerForm.data.label}
                         onChange={(e) => bannerForm.setData("label", e.target.value)}
                         placeholder="About Me"
+                        className="mt-2"
                       />
                     </div>
 
@@ -309,6 +310,7 @@ export default function AboutSectionsPage({
                         onChange={(e) => bannerForm.setData("title", e.target.value)}
                         placeholder="Remarkable lives respond to a greater purpose."
                         rows={3}
+                        className="mt-2"
                       />
                     </div>
 
@@ -316,6 +318,7 @@ export default function AboutSectionsPage({
                       <Label htmlFor="banner_image">Banner Image</Label>
                       <Input
                         id="banner_image"
+                        className="mt-2"
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
@@ -344,6 +347,7 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="video_thumbnail">Video Thumbnail</Label>
                       <Input
+                        className="mt-2"
                         id="video_thumbnail"
                         type="file"
                         accept="image/*"
@@ -373,6 +377,7 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="video_url">Video URL (YouTube Embed)</Label>
                       <Input
+                        className="mt-2"
                         id="video_url"
                         value={bannerForm.data.video_url}
                         onChange={(e) => bannerForm.setData("video_url", e.target.value)}
@@ -402,6 +407,7 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="report_description">Description</Label>
                       <Textarea
+                        className="mt-2"
                         id="report_description"
                         value={reportForm.data.description}
                         onChange={(e) => reportForm.setData("description", e.target.value)}
@@ -415,6 +421,7 @@ export default function AboutSectionsPage({
                           <Label>Statistic {num}</Label>
                           <div className="grid grid-cols-2 gap-2">
                             <Input
+                              className="mt-2"
                               placeholder="Value"
                               value={reportForm.data[`stat_${num}_value` as keyof typeof reportForm.data] as string}
                               onChange={(e) => reportForm.setData(`stat_${num}_value` as any, e.target.value)}
@@ -683,6 +690,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="corp_title">Section Title</Label>
                       <Input
+                        className="mt-2"
+
                         id="corp_title"
                         value={corporateForm.data.title}
                         onChange={(e) => corporateForm.setData("title", e.target.value)}
@@ -692,6 +701,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="philosophy_title">Philosophy Title</Label>
                       <Input
+                        className="mt-2"
+
                         id="philosophy_title"
                         value={corporateForm.data.philosophy_title}
                         onChange={(e) => corporateForm.setData("philosophy_title", e.target.value)}
@@ -701,6 +712,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="logic_theory_title">Logic Theory Title</Label>
                       <Input
+                        className="mt-2"
+
                         id="logic_theory_title"
                         value={corporateForm.data.logic_theory_title}
                         onChange={(e) => corporateForm.setData("logic_theory_title", e.target.value)}
@@ -710,6 +723,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="logic_theory_content_1">Logic Theory Content 1</Label>
                       <Textarea
+                        className="mt-2"
+
                         id="logic_theory_content_1"
                         value={corporateForm.data.logic_theory_content_1}
                         onChange={(e) => corporateForm.setData("logic_theory_content_1", e.target.value)}
@@ -720,6 +735,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="logic_theory_content_2">Logic Theory Content 2</Label>
                       <Textarea
+                        className="mt-2"
+
                         id="logic_theory_content_2"
                         value={corporateForm.data.logic_theory_content_2}
                         onChange={(e) => corporateForm.setData("logic_theory_content_2", e.target.value)}
@@ -730,6 +747,9 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="logic_1_title">Logic #1 Title</Label>
                       <Input
+
+                        className="mt-2"
+
                         id="logic_1_title"
                         value={corporateForm.data.logic_1_title}
                         onChange={(e) => corporateForm.setData("logic_1_title", e.target.value)}
@@ -739,6 +759,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="logic_1_content">Logic #1 Content</Label>
                       <Textarea
+                        className="mt-2"
+
                         id="logic_1_content"
                         value={corporateForm.data.logic_1_content}
                         onChange={(e) => corporateForm.setData("logic_1_content", e.target.value)}
@@ -833,6 +855,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="assoc_title">Section Title</Label>
                       <Input
+                        className="mt-2"
+
                         id="assoc_title"
                         value={associatesForm.data.title}
                         onChange={(e) => associatesForm.setData("title", e.target.value)}
@@ -842,6 +866,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="assoc_description">Description</Label>
                       <Textarea
+                        className="mt-2"
+
                         id="assoc_description"
                         value={associatesForm.data.description}
                         onChange={(e) => associatesForm.setData("description", e.target.value)}
@@ -852,6 +878,8 @@ export default function AboutSectionsPage({
                     <div>
                       <Label htmlFor="assoc_background_image">Background Image</Label>
                       <Input
+                        className="mt-2"
+
                         id="assoc_background_image"
                         type="file"
                         accept="image/*"

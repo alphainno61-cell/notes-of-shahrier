@@ -42,14 +42,22 @@ class AboutMePageSettingController extends Controller
 
     public function impact()
     {
-        $impactSections = \App\Models\AboutSection::where('section_type', 'impact')->orderBy('order')->get();
-        return Inertia::render('dashboard/about-sections/impact', ['impactSections' => $impactSections]);
+        $settings = AboutMePageSetting::first() ?? AboutMePageSetting::create([]);
+        $impactItems = \App\Models\ImpactItem::where('is_active', true)->orderBy('order')->get();
+        return Inertia::render('dashboard/about-sections/impact', [
+            'settings' => $settings,
+            'impactItems' => $impactItems,
+        ]);
     }
 
     public function travel()
     {
-        $travelSections = \App\Models\AboutSection::where('section_type', 'travel')->orderBy('order')->get();
-        return Inertia::render('dashboard/about-sections/travel', ['travelSections' => $travelSections]);
+        $settings = AboutMePageSetting::first() ?? AboutMePageSetting::create([]);
+        $travelCountries = \App\Models\TravelCountry::where('is_active', true)->orderBy('order')->get();
+        return Inertia::render('dashboard/about-sections/travel', [
+            'settings' => $settings,
+            'travelCountries' => $travelCountries,
+        ]);
     }
 
     public function corporate()
@@ -175,7 +183,7 @@ class AboutMePageSettingController extends Controller
         $corporate['logic_1_title'] = $validated['logic_1_title'] ?? $corporate['logic_1_title'] ?? '';
         $corporate['logic_1_content'] = $validated['logic_1_content'] ?? $corporate['logic_1_content'] ?? '';
 
-        $settings->corporate = $corporate;
+        $settings->corporate_journey = $corporate;
         $settings->save();
 
         return redirect()->back()->with('success', 'Corporate journey settings updated successfully!');
@@ -205,5 +213,66 @@ class AboutMePageSettingController extends Controller
         $settings->save();
 
         return redirect()->back()->with('success', 'Associates settings updated successfully!');
+    }
+
+    public function updateTravel(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:2000',
+            'map_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:5120',
+        ]);
+
+        $settings = AboutMePageSetting::first() ?? new AboutMePageSetting();
+        $travel = $settings->travel ?? [];
+
+        // Handle map image upload
+        if ($request->hasFile('map_image')) {
+            $path = $request->file('map_image')->store('about-me/travel', 'public');
+            $travel['map_image'] = '/storage/' . $path;
+        }
+
+        $travel['title'] = $validated['title'] ?? $travel['title'] ?? '';
+        $travel['description'] = $validated['description'] ?? $travel['description'] ?? '';
+
+        $settings->travel = $travel;
+        $settings->save();
+
+        return redirect()->back()->with('success', 'Travel settings updated successfully!');
+    }
+
+    public function updateImpact(Request $request)
+    {
+        $validated = $request->validate([
+            'entrepreneur_title' => 'nullable|string|max:255',
+            'entrepreneur_description' => 'nullable|string|max:2000',
+            'technology_title' => 'nullable|string|max:255',
+            'technology_description' => 'nullable|string|max:2000',
+            'image_1' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'image_2' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'image_3' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'image_4' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ]);
+
+        $settings = AboutMePageSetting::first() ?? new AboutMePageSetting();
+        $impact = $settings->impact ?? [];
+
+        // Handle image uploads
+        for ($i = 1; $i <= 4; $i++) {
+            if ($request->hasFile("image_$i")) {
+                $path = $request->file("image_$i")->store('about-me/impact', 'public');
+                $impact["image_$i"] = '/storage/' . $path;
+            }
+        }
+
+        $impact['entrepreneur_title'] = $validated['entrepreneur_title'] ?? $impact['entrepreneur_title'] ?? '';
+        $impact['entrepreneur_description'] = $validated['entrepreneur_description'] ?? $impact['entrepreneur_description'] ?? '';
+        $impact['technology_title'] = $validated['technology_title'] ?? $impact['technology_title'] ?? '';
+        $impact['technology_description'] = $validated['technology_description'] ?? $impact['technology_description'] ?? '';
+
+        $settings->impact = $impact;
+        $settings->save();
+
+        return redirect()->back()->with('success', 'Impact settings updated successfully!');
     }
 }

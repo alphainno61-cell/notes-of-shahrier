@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Table,
@@ -41,6 +42,10 @@ interface AboutMePageSetting {
         philosophy_image: string;
         background_image: string;
         logic_theory_title: string;
+        logic_theory_content_1: string;
+        logic_theory_content_2: string;
+        logic_1_title: string;
+        logic_1_content: string;
     };
 }
 
@@ -59,6 +64,10 @@ export default function AboutSectionsCorporate({ settings, corporateJourneyItems
         philosophy_image: null as File | null,
         background_image: null as File | null,
         logic_theory_title: settings?.corporate_journey?.logic_theory_title || "",
+        logic_theory_content_1: settings?.corporate_journey?.logic_theory_content_1 || "",
+        logic_theory_content_2: settings?.corporate_journey?.logic_theory_content_2 || "",
+        logic_1_title: settings?.corporate_journey?.logic_1_title || "",
+        logic_1_content: settings?.corporate_journey?.logic_1_content || "",
     });
 
     const handleSubmit = (e: FormEvent) => {
@@ -99,7 +108,7 @@ export default function AboutSectionsCorporate({ settings, corporateJourneyItems
                         <Card>
                             <CardHeader>
                                 <CardTitle>Corporate Journey Settings</CardTitle>
-                                <CardDescription>Configure section titles and images</CardDescription>
+                                <CardDescription>Configure section title</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
@@ -108,16 +117,26 @@ export default function AboutSectionsCorporate({ settings, corporateJourneyItems
                                         id="title"
                                         value={data.title}
                                         onChange={(e) => setData("title", e.target.value)}
+                                        placeholder="Corporate Journey"
                                         className="mt-1"
                                     />
                                 </div>
+                            </CardContent>
+                        </Card>
 
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Philosophy Section</CardTitle>
+                                <CardDescription>Configure the philosophy section content</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
                                 <div>
                                     <Label htmlFor="philosophy_title">Philosophy Title</Label>
                                     <Input
                                         id="philosophy_title"
                                         value={data.philosophy_title}
                                         onChange={(e) => setData("philosophy_title", e.target.value)}
+                                        placeholder="My Philosophy"
                                         className="mt-1"
                                     />
                                 </div>
@@ -177,13 +196,69 @@ export default function AboutSectionsCorporate({ settings, corporateJourneyItems
                                         </div>
                                     )}
                                 </div>
+                            </CardContent>
+                        </Card>
 
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Logic Theory Section</CardTitle>
+                                <CardDescription>Configure the logic theory content</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="logic_theory_title">Logic & Theory Title</Label>
+                                    <Label htmlFor="logic_theory_title">Logic Theory Title</Label>
                                     <Input
                                         id="logic_theory_title"
                                         value={data.logic_theory_title}
                                         onChange={(e) => setData("logic_theory_title", e.target.value)}
+                                        placeholder="Logic Theory"
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="logic_theory_content_1">Logic Theory Paragraph 1</Label>
+                                    <Textarea
+                                        id="logic_theory_content_1"
+                                        value={data.logic_theory_content_1}
+                                        onChange={(e) => setData("logic_theory_content_1", e.target.value)}
+                                        placeholder="Innovation drives progress..."
+                                        rows={3}
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="logic_theory_content_2">Logic Theory Paragraph 2</Label>
+                                    <Textarea
+                                        id="logic_theory_content_2"
+                                        value={data.logic_theory_content_2}
+                                        onChange={(e) => setData("logic_theory_content_2", e.target.value)}
+                                        placeholder="Collaboration and continuous learning..."
+                                        rows={3}
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="logic_1_title">Logic #1 Title</Label>
+                                    <Input
+                                        id="logic_1_title"
+                                        value={data.logic_1_title}
+                                        onChange={(e) => setData("logic_1_title", e.target.value)}
+                                        placeholder="Logic #1"
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="logic_1_content">Logic #1 Content</Label>
+                                    <Textarea
+                                        id="logic_1_content"
+                                        value={data.logic_1_content}
+                                        onChange={(e) => setData("logic_1_content", e.target.value)}
+                                        placeholder="Technology should serve humanity..."
+                                        rows={3}
                                         className="mt-1"
                                     />
                                 </div>

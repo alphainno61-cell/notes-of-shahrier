@@ -107,6 +107,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('book-banner-slides', \App\Http\Controllers\Admin\BookBannerSlideController::class);
         Route::post('book-banner-slides/reorder', [\App\Http\Controllers\Admin\BookBannerSlideController::class, 'reorder'])->name('book-banner-slides.reorder');
         
+        // Travel Countries Management
+        Route::resource('travel-countries', \App\Http\Controllers\Admin\TravelCountryController::class);
+        Route::post('travel-countries/reorder', [\App\Http\Controllers\Admin\TravelCountryController::class, 'reorder'])->name('travel-countries.reorder');
+        
+        // Impact Items Management
+        Route::resource('impact-items', \App\Http\Controllers\Admin\ImpactItemController::class);
+        Route::post('impact-items/reorder', [\App\Http\Controllers\Admin\ImpactItemController::class, 'reorder'])->name('impact-items.reorder');
+        
+        // About Me Page Settings - Travel & Impact Update Routes
+        Route::post('about-me-page-settings/update-travel', [\App\Http\Controllers\Admin\AboutMePageSettingController::class, 'updateTravel'])->name('about-me-page-settings.update-travel');
+        Route::post('about-me-page-settings/update-impact', [\App\Http\Controllers\Admin\AboutMePageSettingController::class, 'updateImpact'])->name('about-me-page-settings.update-impact');
+        
         // Contact Page Settings
         Route::get('contact-page-settings', [ContactPageSettingController::class, 'index'])->name('contact-page-settings.index');
         Route::post('contact-page-settings/update', [ContactPageSettingController::class, 'update'])->name('contact-page-settings.update');
