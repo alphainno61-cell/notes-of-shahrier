@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Donation;
 use App\Models\DonationPageSetting;
+use App\Models\DonationRecord;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -36,5 +37,21 @@ class DonationController extends Controller
             'donation' => $donation,
             'pageSettings' => $pageSettings,
         ]);
+    }
+
+    public function storeDonationInterest(Request $request)
+    {
+        $validated = $request->validate([
+            'donation_id' => 'nullable|exists:donations,id',
+            'donor_name' => 'required|string|max:255',
+            'donor_email' => 'required|email|max:255',
+            'donor_mobile' => 'nullable|string|max:20',
+            'amount' => 'required|numeric|min:1',
+            'message' => 'nullable|string|max:1000',
+        ]);
+
+        DonationRecord::create($validated);
+
+        return redirect()->back()->with('success', 'Thank you for your donation interest! We will contact you shortly.');
     }
 }

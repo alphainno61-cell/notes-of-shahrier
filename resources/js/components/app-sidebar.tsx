@@ -199,6 +199,10 @@ const data = {
           url: "/admin/donations",
         },
         {
+          title: "Donation Records",
+          url: "/admin/donation-records",
+        },
+        {
           title: "Create Donation",
           url: "/admin/donations/create",
         },

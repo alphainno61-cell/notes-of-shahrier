@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import { router } from "@inertiajs/react";
 
 const Proceed = ({ donation, pageSettings }) => {
-  const [selectedAccount, setSelectedAccount] = useState("user");
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -18,6 +19,30 @@ const Proceed = ({ donation, pageSettings }) => {
   const progress = goalAmount > 0 
     ? (raisedAmount / goalAmount) * 100 
     : 0;
+
+  const handleSubmit = () => {
+    if (!selectedAmount || !formData.name || !formData.email) return;
+    
+    setIsSubmitting(true);
+    
+    router.post(`/donate-details/${donation.id}/submit`, {
+      donor_name: formData.name,
+      donor_email: formData.email,
+      donor_mobile: formData.mobile,
+      amount: selectedAmount,
+      message: formData.message,
+    }, {
+      preserveScroll: true,
+      onSuccess: () => {
+        setIsModalOpen(true);
+        setIsSubmitting(false);
+      },
+      onError: () => {
+        setIsSubmitting(false);
+        alert('Something went wrong. Please try again.');
+      },
+    });
+  };
 
   return (
     <div className="bg-slate-50 py-18">
@@ -57,64 +82,11 @@ const Proceed = ({ donation, pageSettings }) => {
 
             <div className="lg:col-span-1 bg-white rounded-xl p-6 shadow h-fit">
               <h1 className="text-2xl font-semibold text-slate-900 mb-4">
-                Donation Option
+                Make a Donation
               </h1>
-              <p className="text-slate-700 mb-4">
+              <p className="text-slate-700 mb-6">
                 Ready to make a difference? Your contribution helps us continue our mission and support those in need.
               </p>
-
-              {/* Account Selection */}
-              <div className="flex space-x-6 mb-4">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="account"
-                    value="user"
-                    checked={selectedAccount === "user"}
-                    onChange={() => setSelectedAccount("user")}
-                    className="hidden"
-                  />
-                  <div
-                    className={`w-5 h-5 border-2 rounded-full flex items-center justify-center ${
-                      selectedAccount === "user"
-                        ? "border-blue-500"
-                        : "border-gray-400"
-                    }`}
-                  >
-                    {selectedAccount === "user" && (
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    )}
-                  </div>
-                  <span className="text-gray-800 font-medium">
-                    User Account
-                  </span>
-                </label>
-
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="account"
-                    value="anonymous"
-                    checked={selectedAccount === "anonymous"}
-                    onChange={() => setSelectedAccount("anonymous")}
-                    className="hidden"
-                  />
-                  <div
-                    className={`w-5 h-5 border-2 rounded-full flex items-center justify-center ${
-                      selectedAccount === "anonymous"
-                        ? "border-blue-500"
-                        : "border-gray-400"
-                    }`}
-                  >
-                    {selectedAccount === "anonymous" && (
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    )}
-                  </div>
-                  <span className="text-gray-800 font-medium">
-                    Anonymous Account
-                  </span>
-                </label>
-              </div>
 
               {/* Donation Amount Selection */}
               <div className="flex flex-wrap gap-2 mb-4">
@@ -142,49 +114,45 @@ const Proceed = ({ donation, pageSettings }) => {
                   className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
                 />
 
-                {selectedAccount === "user" && (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Your Name *"
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
-                    />
+                <input
+                  type="text"
+                  placeholder="Your Name *"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
+                />
 
-                    <input
-                      type="email"
-                      placeholder="Email Address *"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
-                    />
+                <input
+                  type="email"
+                  placeholder="Email Address *"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
+                />
 
-                    <input
-                      type="tel"
-                      placeholder="Mobile Number"
-                      value={formData.mobile}
-                      onChange={(e) => setFormData({...formData, mobile: e.target.value})}
-                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
-                    />
+                <input
+                  type="tel"
+                  placeholder="Mobile Number"
+                  value={formData.mobile}
+                  onChange={(e) => setFormData({...formData, mobile: e.target.value})}
+                  className="rounded-xl bg-slate-50 p-4 w-full text-slate-900"
+                />
 
-                    <textarea
-                      placeholder="Message (Optional)"
-                      value={formData.message}
-                      onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      rows={3}
-                      className="rounded-xl bg-slate-50 p-4 w-full text-slate-900 resize-none"
-                    />
-                  </>
-                )}
+                <textarea
+                  placeholder="Message (Optional)"
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  rows={3}
+                  className="rounded-xl bg-slate-50 p-4 w-full text-slate-900 resize-none"
+                />
 
                 <div className="flex items-center justify-center">
                   <button
-                    className="bg-[#2E5AFF] text-white rounded-lg font-semibold px-8 py-3 w-full hover:bg-blue-700 transition"
-                    onClick={() => setIsModalOpen(true)}
-                    disabled={!selectedAmount}
+                    className="bg-[#2E5AFF] text-white rounded-lg font-semibold px-8 py-3 w-full hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleSubmit}
+                    disabled={!selectedAmount || !formData.name || !formData.email || isSubmitting}
                   >
-                    Submit Donation Interest
+                    {isSubmitting ? 'Submitting...' : 'Submit Donation Interest'}
                   </button>
                 </div>
               </div>
@@ -215,7 +183,7 @@ const Proceed = ({ donation, pageSettings }) => {
               We will contact you shortly with payment details.
             </p>
             
-            {selectedAccount === "user" && formData.name && (
+            {formData.name && (
               <div className="bg-slate-50 rounded-xl p-4 mb-6 text-left">
                 <h3 className="font-semibold text-slate-900 mb-2">Your Details:</h3>
                 <p className="text-slate-700 text-sm">Name: {formData.name}</p>

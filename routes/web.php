@@ -42,6 +42,7 @@ Route::get('/books', [BookController::class, 'index'])->name('books');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 Route::get('/donate-details/{id}', [DonationController::class, 'show'])->name('donate-details');
+Route::post('/donate-details/{id}/submit', [DonationController::class, 'storeDonationInterest'])->name('donate-details.submit');
 Route::get('/donations', [DonationController::class, 'index'])->name('donations');
 Route::get('/entrepreneurship', [EntrepreneurshipController::class, 'index'])->name('entrepreneurship');
 Route::get('/events', [EventController::class, 'index'])->name('events');
@@ -90,6 +91,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('videos', AdminVideoController::class);
         Route::resource('technologies', AdminTechnologyController::class);
         Route::resource('donations', AdminDonationController::class);
+        
+        // Donation Records Management
+        Route::get('donation-records', [\App\Http\Controllers\Admin\DonationRecordController::class, 'index'])->name('donation-records.index');
+        Route::post('donation-records/{donationRecord}/status', [\App\Http\Controllers\Admin\DonationRecordController::class, 'updateStatus'])->name('donation-records.update-status');
+        Route::delete('donation-records/{donationRecord}', [\App\Http\Controllers\Admin\DonationRecordController::class, 'destroy'])->name('donation-records.destroy');
+        
         Route::resource('life-events', AdminLifeEventController::class);
         Route::resource('hero-sections', HeroSectionController::class);
         Route::resource('statistics', StatisticController::class);
