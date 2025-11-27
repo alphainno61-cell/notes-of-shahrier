@@ -6,7 +6,12 @@ const Blogs = ({ blogs, pageContent, featuredBanners, pageSettings }) => {
   return (
     <div>
       <Navbar />
-      <Banner pageContent={pageContent} featuredBanners={featuredBanners} pageSettings={pageSettings} />
+      <Banner 
+        pageContent={pageContent} 
+        featuredBanners={featuredBanners} 
+        pageSettings={pageSettings} 
+        blogs={blogs}
+      />
       <AllBlog blogs={blogs} pageSettings={pageSettings} />
     </div>
   );

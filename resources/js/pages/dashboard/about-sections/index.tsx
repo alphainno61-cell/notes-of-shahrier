@@ -113,6 +113,7 @@ interface AboutMePageSetting {
     philosophy_title: string;
     philosophy_image: string;
     background_image: string;
+    line_image: string;
     logic_theory_title: string;
     logic_theory_content_1: string;
     logic_theory_content_2: string;
@@ -233,6 +234,7 @@ export default function AboutSectionsPage({
     philosophy_title: settings?.corporate_journey?.philosophy_title || 'My Philosophy',
     philosophy_image: null as File | null,
     background_image: null as File | null,
+    line_image: null as File | null,
     logic_theory_title: settings?.corporate_journey?.logic_theory_title || 'Logic Theory',
     logic_theory_content_1: settings?.corporate_journey?.logic_theory_content_1 || '',
     logic_theory_content_2: settings?.corporate_journey?.logic_theory_content_2 || '',

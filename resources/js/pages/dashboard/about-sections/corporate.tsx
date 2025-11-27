@@ -41,6 +41,7 @@ interface AboutMePageSetting {
         philosophy_title: string;
         philosophy_image: string;
         background_image: string;
+        line_image: string;
         logic_theory_title: string;
         logic_theory_content_1: string;
         logic_theory_content_2: string;
@@ -57,12 +58,14 @@ interface Props {
 export default function AboutSectionsCorporate({ settings, corporateJourneyItems }: Props) {
     const [philosophyImagePreview, setPhilosophyImagePreview] = useState<string | null>(null);
     const [backgroundImagePreview, setBackgroundImagePreview] = useState<string | null>(null);
+    const [lineImagePreview, setLineImagePreview] = useState<string | null>(null);
 
     const { data, setData, post, processing } = useForm({
         title: settings?.corporate_journey?.title || "",
         philosophy_title: settings?.corporate_journey?.philosophy_title || "",
         philosophy_image: null as File | null,
         background_image: null as File | null,
+        line_image: null as File | null,
         logic_theory_title: settings?.corporate_journey?.logic_theory_title || "",
         logic_theory_content_1: settings?.corporate_journey?.logic_theory_content_1 || "",
         logic_theory_content_2: settings?.corporate_journey?.logic_theory_content_2 || "",
@@ -78,6 +81,7 @@ export default function AboutSectionsCorporate({ settings, corporateJourneyItems
             onSuccess: () => {
                 setPhilosophyImagePreview(null);
                 setBackgroundImagePreview(null);
+                setLineImagePreview(null);
                 toast.success("Corporate settings updated successfully");
             },
         });
@@ -191,6 +195,37 @@ export default function AboutSectionsCorporate({ settings, corporateJourneyItems
                                             <img
                                                 src={backgroundImagePreview || settings.corporate_journey.background_image}
                                                 alt="Background"
+                                                className="h-32 object-contain"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="line_image">Decorative Line Image</Label>
+                                    <p className="text-sm text-muted-foreground mb-2">
+                                        The decorative line that appears on the philosophy section
+                                    </p>
+                                    <Input
+                                        id="line_image"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                setData("line_image", file);
+                                                const reader = new FileReader();
+                                                reader.onloadend = () => setLineImagePreview(reader.result as string);
+                                                reader.readAsDataURL(file);
+                                            }
+                                        }}
+                                        className="mt-1"
+                                    />
+                                    {(lineImagePreview || settings?.corporate_journey?.line_image) && (
+                                        <div className="mt-2">
+                                            <img
+                                                src={lineImagePreview || settings.corporate_journey.line_image}
+                                                alt="Decorative Line"
                                                 className="h-32 object-contain"
                                             />
                                         </div>

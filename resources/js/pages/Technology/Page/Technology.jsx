@@ -5,7 +5,7 @@ import CyberSecurity from "../Components/CyberSecurity";
 import TechnologyField from "../Components/TechnologyField";
 import Navbar from "@/components/Navbar";
 
-const Technology = ({ technologies, certificates, cyberSecurity, pageSettings }) => {
+const Technology = ({ technologies, certificates, cyberSecurity, pageSettings, blogs }) => {
   return (
     <div>
       <Navbar />
@@ -13,7 +13,7 @@ const Technology = ({ technologies, certificates, cyberSecurity, pageSettings })
       <CyberSecurity items={cyberSecurity} pageSettings={pageSettings} />
       <TechnologyField technologies={technologies} pageSettings={pageSettings} />
       <Certificates certificates={certificates} pageSettings={pageSettings} />
-      <Blogs pageSettings={pageSettings} />
+      <Blogs pageSettings={pageSettings} blogs={blogs} />
     </div>
   );
 };

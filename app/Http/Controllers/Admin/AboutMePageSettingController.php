@@ -153,6 +153,7 @@ class AboutMePageSettingController extends Controller
             'philosophy_title' => 'nullable|string|max:255',
             'philosophy_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'line_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:5120',
             'logic_theory_title' => 'nullable|string|max:255',
             'logic_theory_content_1' => 'nullable|string|max:1000',
             'logic_theory_content_2' => 'nullable|string|max:1000',
@@ -173,6 +174,12 @@ class AboutMePageSettingController extends Controller
         if ($request->hasFile('background_image')) {
             $path = $request->file('background_image')->store('about-me/corporate', 'public');
             $corporate['background_image'] = '/storage/' . $path;
+        }
+
+        // Handle line image upload
+        if ($request->hasFile('line_image')) {
+            $path = $request->file('line_image')->store('about-me/corporate', 'public');
+            $corporate['line_image'] = '/storage/' . $path;
         }
 
         $corporate['title'] = $validated['title'] ?? $corporate['title'] ?? '';

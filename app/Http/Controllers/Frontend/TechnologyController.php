@@ -7,6 +7,7 @@ use App\Models\Technology;
 use App\Models\Certificate;
 use App\Models\PageContent;
 use App\Models\TechnologyPageSetting;
+use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,6 +26,12 @@ class TechnologyController extends Controller
         $pageContent = PageContent::getPageContent('technology');
         
         $pageSettings = TechnologyPageSetting::first();
+        
+        // Get latest published blogs for the blogs section
+        $blogs = BlogPost::where('is_published', true)
+            ->orderBy('published_at', 'desc')
+            ->limit(10)
+            ->get();
 
         return Inertia::render('Technology/Page/Technology', [
             'technologies' => $technologies,
@@ -32,6 +39,7 @@ class TechnologyController extends Controller
             'cyberSecurity' => $cyberSecurity,
             'pageContent' => $pageContent,
             'pageSettings' => $pageSettings,
+            'blogs' => $blogs,
         ]);
     }
 }

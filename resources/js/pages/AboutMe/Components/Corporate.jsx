@@ -74,7 +74,7 @@ const Corporate = ({ pageContent, corporateJourney }) => {
             </div>
           </div>
           <div className="absolute top-64 right-10 z-20 hidden lg:block">
-            <img src="/assets/about_me/line.png" alt="" />
+            <img src={journeyData.line_image || "/assets/about_me/line.png"} alt="" />
           </div>
         </div>
       </div>

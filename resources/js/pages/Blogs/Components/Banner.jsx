@@ -1,12 +1,34 @@
 import { Link } from "@inertiajs/react";
 
-const Banner = ({ pageContent, featuredBanners, pageSettings }) => {
+const Banner = ({ pageContent, featuredBanners, pageSettings, blogs = [] }) => {
   const bannerData = pageContent?.banner || {};
-  const banners = featuredBanners || [];
+  
+  // If featuredBanners exist and have items, use them
+  // Otherwise, use the latest blogs from the database
+  const useFeaturedBanners = featuredBanners && featuredBanners.length > 0;
+  
+  // Transform blogs to banner format if needed
+  const blogsAsBanners = blogs.slice(0, 5).map((blog, index) => ({
+    id: blog.id,
+    slug: blog.slug,
+    title: blog.title,
+    image: blog.featured_image,
+    image_url: blog.featured_image,
+    date: blog.published_at,
+    read_time: blog.read_time ? `${blog.read_time} Min Read` : '5 Min Read',
+    size: index === 0 ? 'large' : 'medium',
+  }));
+  
+  const banners = useFeaturedBanners ? featuredBanners : blogsAsBanners;
   
   // Organize banners by size
   const largeBanner = banners.find(b => b.size === 'large') || banners[0];
   const mediumBanners = banners.filter(b => b.size === 'medium').slice(0, 4);
+  
+  // If using blogs as banners and we have more than 1, take index 1-4 as medium
+  const displayMediumBanners = useFeaturedBanners 
+    ? mediumBanners 
+    : blogsAsBanners.slice(1, 5);
   
   return (
     <div className="bg-slate-100 pt-48 pb-16 relative">
@@ -48,7 +70,7 @@ const Banner = ({ pageContent, featuredBanners, pageSettings }) => {
             </Link>
           )}
 
-          {mediumBanners.map((banner, index) => (
+          {displayMediumBanners.map((banner, index) => (
             <Link 
               key={banner.id || index} 
               href={`/blogs/${banner.slug}`}
