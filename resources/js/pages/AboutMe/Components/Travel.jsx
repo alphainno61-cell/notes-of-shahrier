@@ -26,7 +26,7 @@ const Travel = ({ pageContent, travelCountries }) => {
           <img className="w-full h-full object-cover" src={travelData.map_image || "/assets/about_me/world_map.png"} alt="World Map" />
         </div>
 
-        <div className="absolute right-32 bottom-12 hidden lg:block">
+        {/* <div className="absolute right-32 bottom-12 hidden lg:block">
           <h1 className="text-xl font-semibold text-white mb-4">
             Country Name
           </h1>
@@ -38,7 +38,7 @@ const Travel = ({ pageContent, travelCountries }) => {
               <h2 className="text-white font-semibold text-lg">{country.name}</h2>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

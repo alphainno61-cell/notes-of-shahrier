@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { Head, useForm, Link, router } from "@inertiajs/react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
@@ -62,6 +62,13 @@ interface Associate {
   is_active: boolean;
 }
 
+interface ImpactItem {
+  id: number;
+  title: string;
+  order: number;
+  is_active: boolean;
+}
+
 interface AboutMePageSetting {
   id: number;
   banner: {
@@ -108,6 +115,16 @@ interface AboutMePageSetting {
     description: string;
     background_image: string;
   };
+  impact: {
+    entrepreneur_title: string;
+    entrepreneur_description: string;
+    technology_title: string;
+    technology_description: string;
+    image_1: string;
+    image_2: string;
+    image_3: string;
+    image_4: string;
+  };
   travel: {
     section_title: string;
     section_subtitle: string;
@@ -120,6 +137,7 @@ interface Props {
   awards: Award[];
   corporateJourney: CorporateJourneyItem[];
   associates: Associate[];
+  impactItems: ImpactItem[];
   settings: AboutMePageSetting;
 }
 
@@ -128,11 +146,45 @@ export default function AboutSectionsPage({
   awards,
   corporateJourney,
   associates,
+  impactItems,
   settings
 }: Props) {
   const [previewImages, setPreviewImages] = useState<{ [key: string]: string }>({});
+  
+  // Get initial tab from URL hash or default to 'banner'
+  const getInitialTab = () => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      const validTabs = ['banner', 'report', 'awards', 'story', 'impact', 'travel', 'corporate', 'associates'];
+      return validTabs.includes(hash) ? hash : 'banner';
+    }
+    return 'banner';
+  };
+  
+  const [activeTab, setActiveTab] = useState(getInitialTab);
+  
+  // Update URL hash when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    window.location.hash = value;
+  };
+  
+  // Listen for hash changes (back/forward navigation)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      const validTabs = ['banner', 'report', 'awards', 'story', 'impact', 'travel', 'corporate', 'associates'];
+      if (validTabs.includes(hash)) {
+        setActiveTab(hash);
+      }
+    };
+    
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const storySections = aboutSections.filter(s => s.section_type === 'story');
+  const firstStorySection = storySections[0] || null;
   const impactSection = aboutSections.find(s => s.section_type === 'impact');
   const travelSection = aboutSections.find(s => s.section_type === 'travel');
 
@@ -184,6 +236,19 @@ export default function AboutSectionsPage({
     background_image: null as File | null,
   });
 
+  // Impact form
+  const [impactImagePreviews, setImpactImagePreviews] = useState<{ [key: string]: string | null }>({});
+  const impactForm = useForm({
+    entrepreneur_title: settings?.impact?.entrepreneur_title || 'Entrepreneur Impact',
+    entrepreneur_description: settings?.impact?.entrepreneur_description || '',
+    technology_title: settings?.impact?.technology_title || 'Technology Impact',
+    technology_description: settings?.impact?.technology_description || '',
+    image_1: null as File | null,
+    image_2: null as File | null,
+    image_3: null as File | null,
+    image_4: null as File | null,
+  });
+
   const handleBannerSubmit = (e: FormEvent) => {
     e.preventDefault();
     bannerForm.post('/admin/about-me-page-settings/update-banner', {
@@ -217,6 +282,35 @@ export default function AboutSectionsPage({
       preserveScroll: true,
       onSuccess: () => toast.success("Associates settings updated successfully"),
     });
+  };
+
+  const handleImpactSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    impactForm.post('/admin/about-me-page-settings/update-impact', {
+      forceFormData: true,
+      preserveScroll: true,
+      onSuccess: () => {
+        setImpactImagePreviews({});
+        toast.success("Impact settings updated successfully");
+      },
+    });
+  };
+
+  const handleImpactImageChange = (key: string, file: File | undefined) => {
+    if (file) {
+      impactForm.setData(key as any, file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImpactImagePreviews(prev => ({ ...prev, [key]: reader.result as string }));
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDeleteImpactItem = (id: number) => {
+    if (confirm('Are you sure you want to delete this impact item?')) {
+      router.delete(`/admin/impact-items/${id}`, {
+        onSuccess: () => toast.success("Impact item deleted successfully"),
+      });
+    }
   };
 
   const handleDeleteSection = (id: number) => {
@@ -268,7 +362,7 @@ export default function AboutSectionsPage({
             </p>
           </div>
 
-          <Tabs defaultValue="banner" className="space-y-6">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
             <TabsList className="grid w-full grid-cols-8 lg:w-auto">
               <TabsTrigger value="banner">Banner</TabsTrigger>
               <TabsTrigger value="report">Report</TabsTrigger>
@@ -523,71 +617,69 @@ export default function AboutSectionsPage({
             <TabsContent value="story">
               <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>Story Sections</CardTitle>
-                      <CardDescription>Manage story sections (3 sections)</CardDescription>
-                    </div>
-                    <Link href="/admin/about-sections/create">
-                      <Button>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Story Section
-                      </Button>
-                    </Link>
-                  </div>
+                  <CardTitle>Story Section</CardTitle>
+                  <CardDescription>
+                    This is the main story section displayed on the About Me page
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Order</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {storySections.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                            No story sections found. Create your first one!
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        storySections.map((section) => (
-                          <TableRow key={section.id}>
-                            <TableCell className="font-medium">{section.title}</TableCell>
-                            <TableCell>{section.order}</TableCell>
-                            <TableCell>{section.is_active ? 'Active' : 'Inactive'}</TableCell>
-                            <TableCell className="text-right">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" className="h-8 w-8 p-0">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem asChild>
-                                    <Link href={`/admin/about-sections/${section.id}/edit`}>
-                                      <Pencil className="mr-2 h-4 w-4" />
-                                      Edit
-                                    </Link>
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => handleDeleteSection(section.id)}
-                                    className="text-destructive"
-                                  >
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    Delete
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
-                        ))
+                  {firstStorySection ? (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <Label className="text-muted-foreground">Title</Label>
+                          <p className="text-lg font-medium mt-1">{firstStorySection.title}</p>
+                        </div>
+                        <div>
+                          <Label className="text-muted-foreground">Status</Label>
+                          <p className="mt-1">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${firstStorySection.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                              {firstStorySection.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label className="text-muted-foreground">Content Preview</Label>
+                        <p className="mt-1 text-sm text-muted-foreground line-clamp-3">
+                          {firstStorySection.content}
+                        </p>
+                      </div>
+                      
+                      {firstStorySection.image && (
+                        <div>
+                          <Label className="text-muted-foreground">Current Image</Label>
+                          <div className="mt-2">
+                            <img
+                              src={firstStorySection.image}
+                              alt={firstStorySection.title}
+                              className="h-32 object-contain rounded border"
+                            />
+                          </div>
+                        </div>
                       )}
-                    </TableBody>
-                  </Table>
+                      
+                      <div className="pt-4">
+                        <Link href={`/admin/about-sections/${firstStorySection.id}/edit`}>
+                          <Button>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit Story Section
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-muted-foreground mb-4">No story section found. Create your first one!</p>
+                      <Link href="/admin/about-sections/create?type=story">
+                        <Button>
+                          <Plus className="mr-2 h-4 w-4" />
+                          Create Story Section
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -596,36 +688,164 @@ export default function AboutSectionsPage({
             <TabsContent value="impact">
               <Card>
                 <CardHeader>
-                  <CardTitle>Impact Section</CardTitle>
-                  <CardDescription>
-                    Entrepreneur and Technology impact content
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {impactSection ? (
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Current Impact Section</Label>
-                        <p className="text-sm text-muted-foreground mt-1">{impactSection.title}</p>
-                      </div>
-                      <Link href={`/admin/about-sections/${impactSection.id}/edit`}>
-                        <Button>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit Impact Section
-                        </Button>
-                      </Link>
-                    </div>
-                  ) : (
+                  <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-muted-foreground mb-4">No impact section found.</p>
-                      <Link href="/admin/about-sections/create">
-                        <Button>
-                          <Plus className="mr-2 h-4 w-4" />
-                          Create Impact Section
-                        </Button>
-                      </Link>
+                      <CardTitle>Impact Section</CardTitle>
+                      <CardDescription>
+                        Manage Entrepreneur Impact, Technology Impact content and impact items
+                      </CardDescription>
                     </div>
-                  )}
+                    <Link href="/admin/impact-items/create">
+                      <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Impact Item
+                      </Button>
+                    </Link>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <form onSubmit={handleImpactSubmit} className="space-y-6">
+                    {/* Entrepreneur Impact Section */}
+                    <div className="border rounded-lg p-4 space-y-4">
+                      <h3 className="text-lg font-semibold">Entrepreneur Impact</h3>
+                      <div>
+                        <Label htmlFor="entrepreneur_title">Title</Label>
+                        <Input
+                          id="entrepreneur_title"
+                          value={impactForm.data.entrepreneur_title}
+                          onChange={(e) => impactForm.setData("entrepreneur_title", e.target.value)}
+                          placeholder="Entrepreneur Impact"
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="entrepreneur_description">Description</Label>
+                        <Textarea
+                          id="entrepreneur_description"
+                          value={impactForm.data.entrepreneur_description}
+                          onChange={(e) => impactForm.setData("entrepreneur_description", e.target.value)}
+                          placeholder="As a visionary entrepreneur..."
+                          rows={4}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Technology Impact Section */}
+                    <div className="border rounded-lg p-4 space-y-4">
+                      <h3 className="text-lg font-semibold">Technology Impact</h3>
+                      <div>
+                        <Label htmlFor="technology_title">Title</Label>
+                        <Input
+                          id="technology_title"
+                          value={impactForm.data.technology_title}
+                          onChange={(e) => impactForm.setData("technology_title", e.target.value)}
+                          placeholder="Technology Impact"
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="technology_description">Description</Label>
+                        <Textarea
+                          id="technology_description"
+                          value={impactForm.data.technology_description}
+                          onChange={(e) => impactForm.setData("technology_description", e.target.value)}
+                          placeholder="Shahriar Khan has been at the forefront..."
+                          rows={4}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Section Images */}
+                    <div className="border rounded-lg p-4 space-y-4">
+                      <h3 className="text-lg font-semibold">Section Images (4 Images)</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        {[1, 2, 3, 4].map((num) => (
+                          <div key={num}>
+                            <Label htmlFor={`impact_image_${num}`}>Image {num}</Label>
+                            <Input
+                              id={`impact_image_${num}`}
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => handleImpactImageChange(`image_${num}`, e.target.files?.[0])}
+                              className="mt-1"
+                            />
+                            {(impactImagePreviews[`image_${num}`] || settings?.impact?.[`image_${num}` as keyof typeof settings.impact]) && (
+                              <div className="mt-2">
+                                <img
+                                  src={impactImagePreviews[`image_${num}`] || settings?.impact?.[`image_${num}` as keyof typeof settings.impact]}
+                                  alt={`Image ${num}`}
+                                  className="h-24 object-contain rounded"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Button type="submit" disabled={impactForm.processing}>
+                      {impactForm.processing ? 'Saving...' : 'Save Impact Settings'}
+                    </Button>
+                  </form>
+
+                  {/* Impact Items List */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-semibold mb-4">Impact Items (Technology Grid)</h3>
+                    <p className="text-sm text-muted-foreground mb-4">These items appear in the technology impact grid section</p>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Title</TableHead>
+                          <TableHead>Order</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {impactItems.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                              No impact items found. Add your first one!
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          impactItems.map((item) => (
+                            <TableRow key={item.id}>
+                              <TableCell className="font-medium">{item.title}</TableCell>
+                              <TableCell>{item.order}</TableCell>
+                              <TableCell>{item.is_active ? 'Active' : 'Inactive'}</TableCell>
+                              <TableCell className="text-right">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem asChild>
+                                      <Link href={`/admin/impact-items/${item.id}/edit`}>
+                                        <Pencil className="mr-2 h-4 w-4" />
+                                        Edit
+                                      </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() => handleDeleteImpactItem(item.id)}
+                                      className="text-destructive"
+                                    >
+                                      <Trash2 className="mr-2 h-4 w-4" />
+                                      Delete
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>

@@ -8,6 +8,7 @@ use App\Models\Award;
 use App\Models\CorporateJourneyItem;
 use App\Models\Associate;
 use App\Models\AboutMePageSetting;
+use App\Models\ImpactItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -20,6 +21,7 @@ class AboutSectionController extends Controller
         $awards = Award::orderBy('order')->get();
         $corporateJourney = CorporateJourneyItem::orderBy('order')->get();
         $associates = Associate::orderBy('order')->get();
+        $impactItems = ImpactItem::orderBy('order')->get();
         $settings = AboutMePageSetting::first();
         
         return Inertia::render('dashboard/about-sections/index', [
@@ -27,6 +29,7 @@ class AboutSectionController extends Controller
             'awards' => $awards,
             'corporateJourney' => $corporateJourney,
             'associates' => $associates,
+            'impactItems' => $impactItems,
             'settings' => $settings,
         ]);
     }

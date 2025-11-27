@@ -195,7 +195,7 @@ export default function AboutSectionsTravel({ settings, travelCountries }: Props
                                                 <TableCell>
                                                     {(country.flag_url || country.flag_image) && (
                                                         <img
-                                                            src={country.flag_url || country.flag_image}
+                                                            src={country.flag_url || country.flag_image || undefined}
                                                             alt={country.name}
                                                             className="h-8 w-12 object-contain"
                                                         />
