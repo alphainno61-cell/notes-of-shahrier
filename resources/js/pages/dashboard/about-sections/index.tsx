@@ -306,7 +306,6 @@ export default function AboutSectionsPage({
       forceFormData: true,
       preserveScroll: true,
       onSuccess: () => {
-        setImpactImagePreviews({});
         toast.success("Impact settings updated successfully");
       },
     });
@@ -335,7 +334,6 @@ export default function AboutSectionsPage({
       forceFormData: true,
       preserveScroll: true,
       onSuccess: () => {
-        setTravelMapPreview(null);
         toast.success("Travel settings updated successfully");
       },
     });
