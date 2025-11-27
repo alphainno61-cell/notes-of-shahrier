@@ -80,10 +80,10 @@ export default function EditAboutSection({ aboutSection }: Props) {
               <Card>
                 <CardHeader>
                   <CardTitle>Section Details</CardTitle>
-                  <CardDescription>Edit the details of your about section</CardDescription>
+                  <CardDescription>Edit the details of your about sections</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="section_type">Section Type</Label>
                     <Input
                       id="section_type"
@@ -93,7 +93,7 @@ export default function EditAboutSection({ aboutSection }: Props) {
                       required
                     />
                     {errors.section_type && <p className="text-sm text-red-600">{errors.section_type}</p>}
-                  </div>
+                  </div> */}
 
                   <div className="space-y-2">
                     <Label htmlFor="title">Title</Label>
@@ -147,7 +147,7 @@ export default function EditAboutSection({ aboutSection }: Props) {
                     )}
                   </div>
 
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="additional_data">Additional Data (JSON)</Label>
                     <Textarea
                       id="additional_data"
@@ -178,7 +178,7 @@ export default function EditAboutSection({ aboutSection }: Props) {
                       />
                       <Label htmlFor="is_active">Active</Label>
                     </div>
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
 

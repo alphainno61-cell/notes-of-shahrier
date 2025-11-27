@@ -69,6 +69,15 @@ interface ImpactItem {
   is_active: boolean;
 }
 
+interface TravelCountry {
+  id: number;
+  name: string;
+  flag_image: string | null;
+  flag_url: string | null;
+  order: number;
+  is_active: boolean;
+}
+
 interface AboutMePageSetting {
   id: number;
   banner: {
@@ -126,8 +135,8 @@ interface AboutMePageSetting {
     image_4: string;
   };
   travel: {
-    section_title: string;
-    section_subtitle: string;
+    title: string;
+    description: string;
     map_image: string;
   };
 }
@@ -138,6 +147,7 @@ interface Props {
   corporateJourney: CorporateJourneyItem[];
   associates: Associate[];
   impactItems: ImpactItem[];
+  travelCountries: TravelCountry[];
   settings: AboutMePageSetting;
 }
 
@@ -147,6 +157,7 @@ export default function AboutSectionsPage({
   corporateJourney,
   associates,
   impactItems,
+  travelCountries,
   settings
 }: Props) {
   const [previewImages, setPreviewImages] = useState<{ [key: string]: string }>({});
@@ -185,8 +196,6 @@ export default function AboutSectionsPage({
 
   const storySections = aboutSections.filter(s => s.section_type === 'story');
   const firstStorySection = storySections[0] || null;
-  const impactSection = aboutSections.find(s => s.section_type === 'impact');
-  const travelSection = aboutSections.find(s => s.section_type === 'travel');
 
   // Banner form
   const bannerForm = useForm({
@@ -302,6 +311,34 @@ export default function AboutSectionsPage({
       const reader = new FileReader();
       reader.onloadend = () => setImpactImagePreviews(prev => ({ ...prev, [key]: reader.result as string }));
       reader.readAsDataURL(file);
+    }
+  };
+
+  // Travel form
+  const [travelMapPreview, setTravelMapPreview] = useState<string | null>(null);
+  const travelForm = useForm({
+    title: settings?.travel?.title || '',
+    description: settings?.travel?.description || '',
+    map_image: null as File | null,
+  });
+
+  const handleTravelSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    travelForm.post('/admin/about-me-page-settings/update-travel', {
+      forceFormData: true,
+      preserveScroll: true,
+      onSuccess: () => {
+        setTravelMapPreview(null);
+        toast.success("Travel settings updated successfully");
+      },
+    });
+  };
+
+  const handleDeleteTravelCountry = (id: number) => {
+    if (confirm('Are you sure you want to delete this country?')) {
+      router.delete(`/admin/travel-countries/${id}`, {
+        onSuccess: () => toast.success("Country deleted successfully"),
+      });
     }
   };
 
@@ -854,36 +891,144 @@ export default function AboutSectionsPage({
             <TabsContent value="travel">
               <Card>
                 <CardHeader>
-                  <CardTitle>Travel Section</CardTitle>
-                  <CardDescription>
-                    Business travel countries and experiences
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {travelSection ? (
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Current Travel Section</Label>
-                        <p className="text-sm text-muted-foreground mt-1">{travelSection.title}</p>
-                      </div>
-                      <Link href={`/admin/about-sections/${travelSection.id}/edit`}>
-                        <Button>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit Travel Section
-                        </Button>
-                      </Link>
-                    </div>
-                  ) : (
+                  <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-muted-foreground mb-4">No travel section found.</p>
-                      <Link href="/admin/about-sections/create">
-                        <Button>
-                          <Plus className="mr-2 h-4 w-4" />
-                          Create Travel Section
-                        </Button>
-                      </Link>
+                      <CardTitle>Travel Section</CardTitle>
+                      <CardDescription>
+                        Manage travel section settings and countries visited for business
+                      </CardDescription>
                     </div>
-                  )}
+                    <Link href="/admin/travel-countries/create">
+                      <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Country
+                      </Button>
+                    </Link>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <form onSubmit={handleTravelSubmit} className="space-y-4">
+                    <div className="border rounded-lg p-4 space-y-4">
+                      <h3 className="text-lg font-semibold">Section Settings</h3>
+                      <div>
+                        <Label htmlFor="travel_title">Section Title</Label>
+                        <Input
+                          id="travel_title"
+                          value={travelForm.data.title}
+                          onChange={(e) => travelForm.setData("title", e.target.value)}
+                          placeholder="Travel countries for business purposes"
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="travel_description">Description</Label>
+                        <Textarea
+                          id="travel_description"
+                          value={travelForm.data.description}
+                          onChange={(e) => travelForm.setData("description", e.target.value)}
+                          placeholder="As a global entrepreneur and technology leader..."
+                          rows={4}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="travel_map_image">Map Image</Label>
+                        <Input
+                          id="travel_map_image"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              travelForm.setData("map_image", file);
+                              const reader = new FileReader();
+                              reader.onloadend = () => setTravelMapPreview(reader.result as string);
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                          className="mt-1"
+                        />
+                        {(travelMapPreview || settings?.travel?.map_image) && (
+                          <div className="mt-2">
+                            <img
+                              src={travelMapPreview || settings?.travel?.map_image}
+                              alt="Map Preview"
+                              className="h-32 object-contain rounded"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <Button type="submit" disabled={travelForm.processing}>
+                      {travelForm.processing ? 'Saving...' : 'Save Travel Settings'}
+                    </Button>
+                  </form>
+
+                  {/* Travel Countries List */}
+                  {/* <div className="border-t pt-6">
+                    <h3 className="text-lg font-semibold mb-4">Countries List</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Countries visited for business purposes</p>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Flag</TableHead>
+                          <TableHead>Country Name</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {travelCountries.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                              No countries found. Add your first one!
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          travelCountries.map((country) => (
+                            <TableRow key={country.id}>
+                              <TableCell>
+                                {(country.flag_url || country.flag_image) && (
+                                  <img
+                                    src={country.flag_url || country.flag_image || ''}
+                                    alt={country.name}
+                                    className="h-6 w-9 object-contain"
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell className="font-medium">{country.name}</TableCell>
+                              <TableCell>{country.is_active ? 'Active' : 'Inactive'}</TableCell>
+                              <TableCell className="text-right">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem asChild>
+                                      <Link href={`/admin/travel-countries/${country.id}/edit`}>
+                                        <Pencil className="mr-2 h-4 w-4" />
+                                        Edit
+                                      </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() => handleDeleteTravelCountry(country.id)}
+                                      className="text-destructive"
+                                    >
+                                      <Trash2 className="mr-2 h-4 w-4" />
+                                      Delete
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div> */}
                 </CardContent>
               </Card>
             </TabsContent>
