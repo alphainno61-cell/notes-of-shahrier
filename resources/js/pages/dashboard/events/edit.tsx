@@ -29,6 +29,18 @@ interface Props {
   event: Event
 }
 
+// Helper function to format date for HTML input
+const formatDateForInput = (dateValue: string | null): string => {
+  if (!dateValue) return new Date().toISOString().split('T')[0]
+  try {
+    const date = new Date(dateValue)
+    if (isNaN(date.getTime())) return new Date().toISOString().split('T')[0]
+    return date.toISOString().split('T')[0]
+  } catch {
+    return new Date().toISOString().split('T')[0]
+  }
+}
+
 export default function EditEvent({ event }: Props) {
   const [imagePreview, setImagePreview] = useState<string | null>(event.image)
   const [processing, setProcessing] = useState(false)
@@ -39,7 +51,7 @@ export default function EditEvent({ event }: Props) {
     description: event.description || '',
     image: null as File | null,
     location: event.location || '',
-    event_date: event.event_date || '',
+    event_date: formatDateForInput(event.event_date),
     event_time: event.event_time || '',
     category: event.category || '',
     organizer: event.organizer || '',

@@ -17,12 +17,15 @@ export default function CreateEvent() {
   const [processing, setProcessing] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  // Get today's date in YYYY-MM-DD format for default event date
+  const today = new Date().toISOString().split('T')[0]
+
   const { data, setData } = useForm({
     title: '',
     description: '',
     image: null as File | null,
     location: '',
-    event_date: '',
+    event_date: today,
     event_time: '',
     category: '',
     organizer: '',

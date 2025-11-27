@@ -207,29 +207,6 @@ export default function EntrepreneurshipPageSettings({ settings }: Props) {
                     </div>
 
                     <form className="space-y-6">
-                        {/* General Settings */}
-                        {/* <Card>
-                            <CardHeader>
-                                <CardTitle>General Settings</CardTitle>
-                                <CardDescription>Basic page configuration</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div>
-                                    <Label htmlFor="page_title">Page Title</Label>
-                                    <Input
-                                        id="page_title"
-                                        value={data.page_title}
-                                        onChange={(e) => setData("page_title", e.target.value)}
-                                        placeholder="Entrepreneurship"
-                                        className="mt-1"
-                                    />
-                                    {errors.page_title && (
-                                        <p className="text-destructive text-sm mt-1">{errors.page_title}</p>
-                                    )}
-                                </div>
-                            </CardContent>
-                        </Card> */}
-
                         {/* Banner Settings */}
                         <Card>
                             <CardHeader>

@@ -27,16 +27,16 @@ class EntrepreneurshipPageSettingSeeder extends Seeder
                         'author' => 'Alan Kay',
                         'is_featured' => true,
                     ],
-                    [
-                        'content' => 'Innovation distinguishes between a leader and a follower.',
-                        'author' => 'Steve Jobs',
-                        'is_featured' => false,
-                    ],
-                    [
-                        'content' => 'The only way to do great work is to love what you do.',
-                        'author' => 'Steve Jobs',
-                        'is_featured' => false,
-                    ],
+                    // [
+                    //     'content' => 'Innovation distinguishes between a leader and a follower.',
+                    //     'author' => 'Steve Jobs',
+                    //     'is_featured' => false,
+                    // ],
+                    // [
+                    //     'content' => 'The only way to do great work is to love what you do.',
+                    //     'author' => 'Steve Jobs',
+                    //     'is_featured' => false,
+                    // ],
                 ],
                 'innovation_section_title' => 'Igniting Innovation: A Startup Journey',
                 'innovation_section_subtitle' => 'Embarking on a journey of innovation, I\'ve founded and nurtured several startups that push the boundaries of technology and creativity. From NexKraft\'s focus on next-generation technological advancements to Mechani\'s engineering solutions, Huistle\'s innovative platforms, and Mindshaper\'s transformative ideas, each venture represents a step towards transforming bold concepts into impactful realities. This entrepreneurial path has been about more than just building companies—it\'s about fostering a culture of innovation that drives progress and creates lasting value in the digital world.',
