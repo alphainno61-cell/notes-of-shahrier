@@ -85,7 +85,7 @@ const Home = ({ indexPage }: Props) => {
                         timeoutRef.current = null;
                     }, 300) as any;
                 }
-            }} className="absolute bottom-4 py-4 px-8 bg-white text-black hover:bg-[#e7e7e7] hover:text-[#0f0f0f] font-semibold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl z-30">
+            }} className="absolute bottom-4 py-4 px-8 bg-white text-black hover:bg-[#e7e7e7] hover:text-[#0f0f0f] font-semibold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl z-30 cursor-pointer">
                 {buttonText}
             </motion.button>
 
