@@ -11,9 +11,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 interface VideosPageSetting {
     id: number;
-    banner_videos_section_title: string | null;
-    all_videos_section_title: string | null;
-    short_videos_section_title: string | null;
+    all_videos_title: string | null;
+    all_videos_description: string | null;
+    short_videos_title: string | null;
+    short_videos_description: string | null;
 }
 
 interface Props {
@@ -22,9 +23,10 @@ interface Props {
 
 export default function VideosPageSettingsContent({ settings }: Props) {
     const { data, setData, post, processing } = useForm({
-        banner_videos_section_title: settings?.banner_videos_section_title || "Featured Videos",
-        all_videos_section_title: settings?.all_videos_section_title || "All Videos",
-        short_videos_section_title: settings?.short_videos_section_title || "Short Videos",
+        all_videos_title: settings?.all_videos_title || "All Videos",
+        all_videos_description: settings?.all_videos_description || "",
+        short_videos_title: settings?.short_videos_title || "Short Videos",
+        short_videos_description: settings?.short_videos_description || "",
     });
 
     const handleSubmit = (e: FormEvent) => {
@@ -52,38 +54,49 @@ export default function VideosPageSettingsContent({ settings }: Props) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Video Sections</CardTitle>
-                                <CardDescription>Set titles for different video sections</CardDescription>
+                                <CardDescription>Set titles and descriptions for different video sections</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="banner_videos_section_title">Banner Videos Section Title</Label>
+                                    <Label htmlFor="all_videos_title">All Videos Section Title</Label>
                                     <Input
-                                        id="banner_videos_section_title"
-                                        value={data.banner_videos_section_title}
-                                        onChange={(e) => setData("banner_videos_section_title", e.target.value)}
-                                        placeholder="Featured Videos"
-                                        className="mt-1"
-                                    />
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="all_videos_section_title">All Videos Section Title</Label>
-                                    <Input
-                                        id="all_videos_section_title"
-                                        value={data.all_videos_section_title}
-                                        onChange={(e) => setData("all_videos_section_title", e.target.value)}
+                                        id="all_videos_title"
+                                        value={data.all_videos_title}
+                                        onChange={(e) => setData("all_videos_title", e.target.value)}
                                         placeholder="All Videos"
                                         className="mt-1"
                                     />
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="short_videos_section_title">Short Videos Section Title</Label>
+                                    <Label htmlFor="all_videos_description">All Videos Section Description</Label>
                                     <Input
-                                        id="short_videos_section_title"
-                                        value={data.short_videos_section_title}
-                                        onChange={(e) => setData("short_videos_section_title", e.target.value)}
+                                        id="all_videos_description"
+                                        value={data.all_videos_description}
+                                        onChange={(e) => setData("all_videos_description", e.target.value)}
+                                        placeholder="Browse through all my video content"
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="short_videos_title">Short Videos Section Title</Label>
+                                    <Input
+                                        id="short_videos_title"
+                                        value={data.short_videos_title}
+                                        onChange={(e) => setData("short_videos_title", e.target.value)}
                                         placeholder="Short Videos"
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="short_videos_description">Short Videos Section Description</Label>
+                                    <Input
+                                        id="short_videos_description"
+                                        value={data.short_videos_description}
+                                        onChange={(e) => setData("short_videos_description", e.target.value)}
+                                        placeholder="Quick clips and highlights"
                                         className="mt-1"
                                     />
                                 </div>

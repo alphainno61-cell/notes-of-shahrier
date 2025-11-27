@@ -11,9 +11,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 interface VideosPageSetting {
     id: number;
+    page_title: string | null;
     banner_title: string | null;
-    banner_left_vector_image: string | null;
-    banner_right_vector_image: string | null;
+    banner_subtitle: string | null;
+    banner_description: string | null;
+    banner_image: string | null;
 }
 
 interface Props {
@@ -21,13 +23,14 @@ interface Props {
 }
 
 export default function VideosPageSettingsBanner({ settings }: Props) {
-    const [leftVectorPreview, setLeftVectorPreview] = useState<string | null>(null);
-    const [rightVectorPreview, setRightVectorPreview] = useState<string | null>(null);
+    const [bannerImagePreview, setBannerImagePreview] = useState<string | null>(null);
 
     const { data, setData, post, processing } = useForm({
-        banner_title: settings?.banner_title || "My Videos",
-        banner_left_vector_image: null as File | null,
-        banner_right_vector_image: null as File | null,
+        page_title: settings?.page_title || "Videos",
+        banner_title: settings?.banner_title || "",
+        banner_subtitle: settings?.banner_subtitle || "",
+        banner_description: settings?.banner_description || "",
+        banner_image: null as File | null,
     });
 
     const handleSubmit = (e: FormEvent) => {
@@ -36,8 +39,7 @@ export default function VideosPageSettingsBanner({ settings }: Props) {
             forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
-                setLeftVectorPreview(null);
-                setRightVectorPreview(null);
+                setBannerImagePreview(null);
                 toast.success("Banner settings updated successfully");
             },
         });
@@ -60,69 +62,76 @@ export default function VideosPageSettingsBanner({ settings }: Props) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Banner Content</CardTitle>
-                                <CardDescription>Set banner title and vector images</CardDescription>
+                                <CardDescription>Set banner title and content</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
+                                <div>
+                                    <Label htmlFor="page_title">Page Title</Label>
+                                    <Input
+                                        id="page_title"
+                                        value={data.page_title}
+                                        onChange={(e) => setData("page_title", e.target.value)}
+                                        placeholder="Videos"
+                                        className="mt-1"
+                                    />
+                                    <p className="text-sm text-muted-foreground mt-1">This is the main heading displayed on the videos page</p>
+                                </div>
+
                                 <div>
                                     <Label htmlFor="banner_title">Banner Title</Label>
                                     <Input
                                         id="banner_title"
                                         value={data.banner_title}
                                         onChange={(e) => setData("banner_title", e.target.value)}
+                                        placeholder="Featured Videos"
                                         className="mt-1"
                                     />
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="banner_left_vector_image">Left Vector Image</Label>
+                                    <Label htmlFor="banner_subtitle">Banner Subtitle</Label>
                                     <Input
-                                        id="banner_left_vector_image"
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0];
-                                            if (file) {
-                                                setData("banner_left_vector_image", file);
-                                                const reader = new FileReader();
-                                                reader.onloadend = () => setLeftVectorPreview(reader.result as string);
-                                                reader.readAsDataURL(file);
-                                            }
-                                        }}
+                                        id="banner_subtitle"
+                                        value={data.banner_subtitle}
+                                        onChange={(e) => setData("banner_subtitle", e.target.value)}
+                                        placeholder="Watch my latest content"
                                         className="mt-1"
                                     />
-                                    {(leftVectorPreview || settings?.banner_left_vector_image) && (
-                                        <div className="mt-4 relative w-full h-48 bg-muted rounded-md overflow-hidden">
-                                            <img
-                                                src={leftVectorPreview || settings.banner_left_vector_image || ""}
-                                                alt="Left Vector Preview"
-                                                className="w-full h-full object-contain"
-                                            />
-                                        </div>
-                                    )}
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="banner_right_vector_image">Right Vector Image</Label>
+                                    <Label htmlFor="banner_description">Banner Description</Label>
                                     <Input
-                                        id="banner_right_vector_image"
+                                        id="banner_description"
+                                        value={data.banner_description}
+                                        onChange={(e) => setData("banner_description", e.target.value)}
+                                        placeholder="Explore videos on technology, entrepreneurship, and more"
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="banner_image">Banner Image</Label>
+                                    <Input
+                                        id="banner_image"
                                         type="file"
                                         accept="image/*"
                                         onChange={(e) => {
                                             const file = e.target.files?.[0];
                                             if (file) {
-                                                setData("banner_right_vector_image", file);
+                                                setData("banner_image", file);
                                                 const reader = new FileReader();
-                                                reader.onloadend = () => setRightVectorPreview(reader.result as string);
+                                                reader.onloadend = () => setBannerImagePreview(reader.result as string);
                                                 reader.readAsDataURL(file);
                                             }
                                         }}
                                         className="mt-1"
                                     />
-                                    {(rightVectorPreview || settings?.banner_right_vector_image) && (
+                                    {(bannerImagePreview || settings?.banner_image) && (
                                         <div className="mt-4 relative w-full h-48 bg-muted rounded-md overflow-hidden">
                                             <img
-                                                src={rightVectorPreview || settings.banner_right_vector_image || ""}
-                                                alt="Right Vector Preview"
+                                                src={bannerImagePreview || settings.banner_image || ""}
+                                                alt="Banner Preview"
                                                 className="w-full h-full object-contain"
                                             />
                                         </div>

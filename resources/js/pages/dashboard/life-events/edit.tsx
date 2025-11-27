@@ -33,11 +33,20 @@ export default function EditLifeEvent({ lifeEvent }: Props) {
   const [processing, setProcessing] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  // Format date for HTML date input (YYYY-MM-DD)
+  const formatDateForInput = (dateString: string | null) => {
+    if (!dateString) return ''
+    // Handle both ISO date strings and other formats
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return dateString
+    return date.toISOString().split('T')[0]
+  }
+
   const { data, setData } = useForm({
     title: lifeEvent.title || '',
     description: lifeEvent.description || '',
     image: null as File | null,
-    event_date: lifeEvent.event_date || '',
+    event_date: formatDateForInput(lifeEvent.event_date),
     category: lifeEvent.category || '',
     location: lifeEvent.location || '',
     is_featured: lifeEvent.is_featured || false,

@@ -22,7 +22,17 @@ const Certificates = ({ certificates = [], pageSettings }) => {
     { id: 4, certificate_image: "/assets/technology/certificate_1.png", title: "Technology Certificate" },
   ];
 
-  const displayCertificates = certificates.length > 0 ? certificates : defaultCertificates;
+  // Map backend certificate fields to frontend expected fields
+  const mappedCertificates = certificates.map(cert => ({
+    ...cert,
+    title: cert.name || cert.title,
+    certificate_image: cert.image || cert.certificate_image,
+    issuer: cert.issuing_organization || cert.issuer,
+    date: cert.issue_date || cert.date,
+    description: cert.description || `Credential ID: ${cert.credential_id || 'N/A'}`,
+  }));
+
+  const displayCertificates = mappedCertificates.length > 0 ? mappedCertificates : defaultCertificates;
 
   const NextArrow = ({ onClick }) => (
     <div

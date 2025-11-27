@@ -17,11 +17,17 @@ export default function CreateLifeEvent() {
   const [processing, setProcessing] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  // Get current date in YYYY-MM-DD format for default value
+  const getCurrentDate = () => {
+    const today = new Date()
+    return today.toISOString().split('T')[0]
+  }
+
   const { data, setData } = useForm({
     title: '',
     description: '',
     image: null as File | null,
-    event_date: '',
+    event_date: getCurrentDate(), // Auto-fill with current date
     category: '',
     location: '',
     is_featured: false,
