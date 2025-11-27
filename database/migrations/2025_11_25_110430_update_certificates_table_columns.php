@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
+            // Rename columns to match model
+            $table->renameColumn('title', 'name');
+            $table->renameColumn('issuer', 'issuing_organization');
+            $table->renameColumn('certificate_url', 'credential_url');
+            
+            // Add new column
             $table->string('credential_id')->nullable()->after('expiry_date');
+            
+            // Remove columns no longer needed
             $table->dropColumn(['description', 'category']);
         });
     }
@@ -23,9 +31,17 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
+            // Revert column renames
+            $table->renameColumn('name', 'title');
+            $table->renameColumn('issuing_organization', 'issuer');
+            $table->renameColumn('credential_url', 'certificate_url');
+            
+            // Remove new column
             $table->dropColumn('credential_id');
-            $table->text('description')->nullable()->after('issuing_organization');
-            $table->string('category')->nullable()->after('expiry_date');
+            
+            // Add back removed columns
+            $table->text('description')->nullable();
+            $table->string('category')->nullable();
         });
     }
 };

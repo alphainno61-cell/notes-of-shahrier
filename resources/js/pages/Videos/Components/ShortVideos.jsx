@@ -32,35 +32,8 @@ const ShortVideos = ({ videos = [], settings }) => {
   const [activeVideo, setActiveVideo] = useState(null);
   const [fullscreenVideo, setFullscreenVideo] = useState(null);
 
-  // Default videos if none provided
-  const defaultVideos = [
-    {
-      id: 1,
-      thumbnail: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
-      title: "Quick Tech Tip: Docker Basics"
-    },
-    {
-      id: 2,
-      thumbnail: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=6Iu45VZGQDk",
-      title: "React Best Practices"
-    },
-    {
-      id: 3,
-      thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
-      title: "Tech Tip: Version Control"
-    },
-    {
-      id: 4,
-      thumbnail: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
-      title: "Building Scalable Apps"
-    },
-  ];
-
-  const displayVideos = videos.length > 0 ? videos : defaultVideos;
+  // Use videos directly from database (passed via props)
+  const displayVideos = videos;
 
   const handlePlayVideo = (id) => {
     setActiveVideo(id);
@@ -115,7 +88,11 @@ const ShortVideos = ({ videos = [], settings }) => {
           {settings?.short_videos_title || "Short Videos"}
         </h1>
 
-        {displayVideos.length > 0 && (
+        {displayVideos.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-white/70 text-lg">No short videos available at the moment.</p>
+          </div>
+        ) : (
           <Slider {...sliderSettings}>
             {displayVideos.map((video) => (
               <div key={video.id} className="relative w-64 p-4">

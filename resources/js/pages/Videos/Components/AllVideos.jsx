@@ -10,47 +10,8 @@ const AllVideos = ({ videos = [], settings }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  // Default data if no videos provided
-  const defaultVideos = [
-    {
-      id: 1,
-      title: "How to Build a Successful Startup",
-      thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=jNQXAC9IVRw"
-    },
-    {
-      id: 2,
-      title: "Quick Tech Tip: Docker Basics",
-      thumbnail: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=kJQP7kiw5Fk"
-    },
-    {
-      id: 3,
-      title: "Leadership in Tech Industry",
-      thumbnail: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=3JZ_D3ELwOQ"
-    },
-    {
-      id: 4,
-      title: "React Best Practices",
-      thumbnail: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=6Iu45VZGQDk"
-    },
-    {
-      id: 5,
-      title: "My Entrepreneurship Journey",
-      thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=8aGhZQkoFbQ"
-    },
-    {
-      id: 6,
-      title: "Building High-Performing Teams",
-      thumbnail: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=hHIikHJV9fI"
-    },
-  ];
-
-  const displayVideos = videos.length > 0 ? videos : defaultVideos;
+  // Use videos directly from database (passed via props)
+  const displayVideos = videos;
 
   const filteredVideos = displayVideos.filter(video =>
     video.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -93,10 +54,15 @@ const AllVideos = ({ videos = [], settings }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {filteredVideos.slice(0, visibleVideos).map((video) => (
-            <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-shadow p-0!">
-              <CardContent className="p-0!">
+        {displayVideos.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-slate-500 text-lg">No videos available at the moment.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {filteredVideos.slice(0, visibleVideos).map((video) => (
+              <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-shadow p-0!">
+                <CardContent className="p-0!">
                 <div className="w-full relative group cursor-pointer" onClick={() => handlePlayVideo(video)}>
                   <img
                     className="w-full h-48 object-cover"
@@ -132,25 +98,28 @@ const AllVideos = ({ videos = [], settings }) => {
               </CardContent>
             </Card>
           ))}
-        </div>
+          </div>
+        )}
 
-        <div className="text-center mt-6">
-          {visibleVideos < filteredVideos.length ? (
-            <Button
-              onClick={() => setVisibleVideos(filteredVideos.length)}
-              className="bg-blue-500 hover:bg-blue-600"
-            >
-              Load More
-            </Button>
-          ) : filteredVideos.length > 3 && (
-            <Button
-              onClick={() => setVisibleVideos(3)}
-              variant="destructive"
-            >
-              Show Less
-            </Button>
-          )}
-        </div>
+        {displayVideos.length > 0 && (
+          <div className="text-center mt-6">
+            {visibleVideos < filteredVideos.length ? (
+              <Button
+                onClick={() => setVisibleVideos(filteredVideos.length)}
+                className="bg-blue-500 hover:bg-blue-600"
+              >
+                Load More
+              </Button>
+            ) : filteredVideos.length > 3 && (
+              <Button
+                onClick={() => setVisibleVideos(3)}
+                variant="destructive"
+              >
+                Show Less
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>

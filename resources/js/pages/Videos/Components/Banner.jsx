@@ -6,29 +6,8 @@ import { Play } from "lucide-react";
 const Banner = ({ videos = [], settings }) => {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  // Default videos if none provided
-  const defaultVideos = [
-    {
-      id: 1,
-      title: "How to Build a Successful Startup",
-      thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=jNQXAC9IVRw"
-    },
-    {
-      id: 2,
-      title: "Leadership in Tech Industry",
-      thumbnail: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=kJQP7kiw5Fk"
-    },
-    {
-      id: 3,
-      title: "My Entrepreneurship Journey",
-      thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=640&h=360&fit=crop&crop=center",
-      video_url: "https://www.youtube.com/watch?v=3JZ_D3ELwOQ"
-    },
-  ];
-
-  const displayVideos = videos.length > 0 ? videos.slice(0, 3) : defaultVideos;
+  // Use videos from database (passed via props), take first 3 for banner
+  const displayVideos = videos.slice(0, 3);
 
   const handlePlayVideo = (video) => {
     setSelectedVideo(video);
@@ -64,50 +43,56 @@ const Banner = ({ videos = [], settings }) => {
       <div className="w-11/12 lg:w-9/12 mx-auto mt-24">
         <h1 className="text-5xl text-slate-900 font-semibold mb-12">{settings?.page_title || "Videos"}</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-2 gap-x-8 gap-y-6">
-          {displayVideos.length > 0 && (
-            <div className="lg:col-span-2 lg:row-span-2">
-              <div className="w-full h-full relative group cursor-pointer" onClick={() => handlePlayVideo(displayVideos[0])}>
-                <img
-                  className="w-full h-full object-cover rounded-lg transition-transform group-hover:scale-105"
-                  src={displayVideos[0].thumbnail || "/assets/videos/video_thumbline.png"}
-                  alt={displayVideos[0].title}
-                />
-                <div className="flex items-center gap-2 absolute bottom-10 left-4">
-                  <Button
-                    size="lg"
-                    className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"
-                  >
-                    <Play className="w-6 h-6 text-white" />
-                  </Button>
-                  <h3 className="text-4xl font-semibold text-white hidden lg:block">
-                    {displayVideos[0].title}
-                  </h3>
+        {displayVideos.length === 0 ? (
+          <div className="col-span-3 text-center py-12">
+            <p className="text-slate-500 text-lg">No featured videos available at the moment.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-2 gap-x-8 gap-y-6">
+            {displayVideos.length > 0 && (
+              <div className="lg:col-span-2 lg:row-span-2">
+                <div className="w-full h-full relative group cursor-pointer" onClick={() => handlePlayVideo(displayVideos[0])}>
+                  <img
+                    className="w-full h-full object-cover rounded-lg transition-transform group-hover:scale-105"
+                    src={displayVideos[0].thumbnail || "/assets/videos/video_thumbline.png"}
+                    alt={displayVideos[0].title}
+                  />
+                  <div className="flex items-center gap-2 absolute bottom-10 left-4">
+                    <Button
+                      size="lg"
+                      className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"
+                    >
+                      <Play className="w-6 h-6 text-white" />
+                    </Button>
+                    <h3 className="text-4xl font-semibold text-white hidden lg:block">
+                      {displayVideos[0].title}
+                    </h3>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {displayVideos.slice(1).map((video) => (
-            <div key={video.id} className="lg:col-span-1 lg:row-span-1">
-              <div className="w-full h-full relative group cursor-pointer" onClick={() => handlePlayVideo(video)}>
-                <img
-                  className="w-full h-full object-cover rounded-lg transition-transform group-hover:scale-105"
-                  src={video.thumbnail || "/assets/videos/video_thumbline.png"}
-                  alt={video.title}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Button
-                    size="lg"
-                    className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"
-                  >
-                    <Play className="w-6 h-6 text-white" />
-                  </Button>
-                </div>
+            {displayVideos.slice(1).map((video) => (
+              <div key={video.id} className="lg:col-span-1 lg:row-span-1">
+                <div className="w-full h-full relative group cursor-pointer" onClick={() => handlePlayVideo(video)}>
+                  <img
+                    className="w-full h-full object-cover rounded-lg transition-transform group-hover:scale-105"
+                    src={video.thumbnail || "/assets/videos/video_thumbline.png"}
+                    alt={video.title}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Button
+                      size="lg"
+                      className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"
+                    >
+                      <Play className="w-6 h-6 text-white" />
+                    </Button>
+                  </div>
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
 
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>

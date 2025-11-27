@@ -7,27 +7,23 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft } from 'lucide-react'
 
 export default function CreateCertificate() {
-  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [processing, setProcessing] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const { data, setData } = useForm({
-    title: '',
-    description: '',
-    certificate_url: '',
-    thumbnail: null as File | null,
-    platform: 'YouTube',
-    category: '',
-    duration: '',
-    is_short: false,
-    views: 0,
-    published_at: '',
+    name: '',
+    issuing_organization: '',
+    issue_date: '',
+    expiry_date: '',
+    credential_id: '',
+    credential_url: '',
+    image: null as File | null,
+    order: 0,
   })
 
   const handleSubmit: FormEventHandler = (e) => {
@@ -72,7 +68,7 @@ export default function CreateCertificate() {
               </Link>
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Create Certificate</h1>
-                <p className="text-muted-foreground">Add a new certificate to your website</p>
+                <p className="text-muted-foreground">Add a new certificate to your profile</p>
               </div>
             </div>
 
@@ -84,132 +80,129 @@ export default function CreateCertificate() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="title">Title</Label>
+                    <Label htmlFor="name">Certificate Name *</Label>
                     <Input
-                      id="title"
-                      value={data.title}
-                      onChange={(e) => setData('title', e.target.value)}
-                      placeholder="Enter certificate title"
+                      id="name"
+                      value={data.name}
+                      onChange={(e) => setData('name', e.target.value)}
+                      placeholder="e.g., AWS Solutions Architect"
                       required
                     />
-                    {errors.title && (
-                      <p className="text-sm text-red-600">{errors.title}</p>
+                    {errors.name && (
+                      <p className="text-sm text-red-600">{errors.name}</p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      value={data.description}
-                      onChange={(e) => setData('description', e.target.value)}
-                      placeholder="Enter certificate description"
-                      rows={4}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="certificate_url">Certificate URL</Label>
+                    <Label htmlFor="issuing_organization">Issuing Organization *</Label>
                     <Input
-                      id="certificate_url"
-                      value={data.certificate_url}
-                      onChange={(e) => setData('certificate_url', e.target.value)}
-                      placeholder="https://youtube.com/watch?v=..."
+                      id="issuing_organization"
+                      value={data.issuing_organization}
+                      onChange={(e) => setData('issuing_organization', e.target.value)}
+                      placeholder="e.g., Amazon Web Services"
                       required
                     />
+                    {errors.issuing_organization && (
+                      <p className="text-sm text-red-600">{errors.issuing_organization}</p>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="issue_date">Issue Date *</Label>
+                      <Input
+                        id="issue_date"
+                        type="date"
+                        value={data.issue_date}
+                        onChange={(e) => setData('issue_date', e.target.value)}
+                        required
+                      />
+                      {errors.issue_date && (
+                        <p className="text-sm text-red-600">{errors.issue_date}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="expiry_date">Expiry Date (optional)</Label>
+                      <Input
+                        id="expiry_date"
+                        type="date"
+                        value={data.expiry_date}
+                        onChange={(e) => setData('expiry_date', e.target.value)}
+                      />
+                      {errors.expiry_date && (
+                        <p className="text-sm text-red-600">{errors.expiry_date}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="credential_id">Credential ID</Label>
+                      <Input
+                        id="credential_id"
+                        value={data.credential_id}
+                        onChange={(e) => setData('credential_id', e.target.value)}
+                        placeholder="e.g., AWS-SAA-C03-123456"
+                      />
+                      {errors.credential_id && (
+                        <p className="text-sm text-red-600">{errors.credential_id}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="order">Display Order</Label>
+                      <Input
+                        id="order"
+                        type="number"
+                        value={data.order}
+                        onChange={(e) => setData('order', parseInt(e.target.value) || 0)}
+                        min={0}
+                      />
+                    </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="thumbnail">Thumbnail</Label>
+                    <Label htmlFor="credential_url">Credential URL</Label>
                     <Input
-                      id="thumbnail"
+                      id="credential_url"
+                      value={data.credential_url}
+                      onChange={(e) => setData('credential_url', e.target.value)}
+                      placeholder="https://www.credential.net/..."
+                    />
+                    {errors.credential_url && (
+                      <p className="text-sm text-red-600">{errors.credential_url}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="image">Certificate Image</Label>
+                    <Input
+                      id="image"
                       type="file"
                       accept="image/*"
                       onChange={(e) => {
                         const file = e.target.files?.[0]
                         if (file) {
-                          setData('thumbnail', file)
+                          setData('image', file)
                           const reader = new FileReader()
                           reader.onloadend = () => {
-                            setThumbnailPreview(reader.result as string)
+                            setImagePreview(reader.result as string)
                           }
                           reader.readAsDataURL(file)
                         }
                       }}
                     />
-                    {errors.thumbnail && <p className="text-sm text-red-600">{errors.thumbnail}</p>}
-                    {thumbnailPreview && (
+                    {errors.image && <p className="text-sm text-red-600">{errors.image}</p>}
+                    {imagePreview && (
                       <div className="mt-2">
                         <img
-                          src={thumbnailPreview}
-                          alt="Thumbnail preview"
+                          src={imagePreview}
+                          alt="Certificate preview"
                           className="max-w-xs rounded-md border"
                         />
                       </div>
                     )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="platform">Platform</Label>
-                      <Input
-                        id="platform"
-                        value={data.platform}
-                        onChange={(e) => setData('platform', e.target.value)}
-                        placeholder="YouTube, Vimeo, etc."
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="category">Category</Label>
-                      <Input
-                        id="category"
-                        value={data.category}
-                        onChange={(e) => setData('category', e.target.value)}
-                        placeholder="e.g., Tutorial, Vlog"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="duration">Duration (e.g., 10:30)</Label>
-                      <Input
-                        id="duration"
-                        value={data.duration}
-                        onChange={(e) => setData('duration', e.target.value)}
-                        placeholder="10:30"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="views">Views</Label>
-                      <Input
-                        id="views"
-                        type="number"
-                        value={data.views}
-                        onChange={(e) => setData('views', parseInt(e.target.value) || 0)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="published_at">Publish Date</Label>
-                    <Input
-                      id="published_at"
-                      type="date"
-                      value={data.published_at}
-                      onChange={(e) => setData('published_at', e.target.value)}
-                    />
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="is_short"
-                      checked={data.is_short}
-                      onCheckedChange={(checked) => setData('is_short', checked)}
-                    />
-                    <Label htmlFor="is_short">Short Certificate (&lt; 60 seconds)</Label>
                   </div>
                 </CardContent>
               </Card>

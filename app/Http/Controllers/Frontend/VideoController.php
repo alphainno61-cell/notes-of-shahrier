@@ -15,11 +15,14 @@ class VideoController extends Controller
     {
         $settings = VideosPageSetting::first();
         
-        $regularVideos = $settings && $settings->all_videos ? collect($settings->all_videos) : Video::where('is_short', false)
+        // Always query from Video model with proper is_short filtering
+        $regularVideos = Video::where('is_short', false)
+            ->orderBy('order', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $shortVideos = $settings && $settings->short_videos ? collect($settings->short_videos) : Video::where('is_short', true)
+        $shortVideos = Video::where('is_short', true)
+            ->orderBy('order', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
             

@@ -8,8 +8,8 @@ const Videos = ({ videos, shortVideos, settings }) => {
     <div>
       <Navbar />
       <Banner videos={settings?.banner_videos || videos.slice(0, 3)} settings={settings} />
-      <AllVideos videos={settings?.all_videos || videos} settings={settings} />
-      <ShortVideos videos={settings?.short_videos || shortVideos} settings={settings} />
+      <AllVideos videos={videos} settings={settings} />
+      <ShortVideos videos={shortVideos} settings={settings} />
     </div>
   );
 };

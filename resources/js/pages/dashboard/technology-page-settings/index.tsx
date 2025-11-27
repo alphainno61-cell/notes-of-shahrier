@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Head, useForm, router } from "@inertiajs/react";
+import { Head, useForm, router, Link } from "@inertiajs/react";
 import { toast } from "sonner";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Award, ExternalLink, Plus, Pencil, Trash2 } from "lucide-react";
 import { AndroidIcon } from "../../../svgs/androidIcon";
 import { CursorLight } from "../../../svgs/cursorLight";
 import { GithubLight } from "../../../svgs/githubLight";
@@ -91,11 +93,23 @@ interface TechnologyPageSetting {
     google_cloud_icon_svg: string | null;
 }
 
-interface Props {
-    settings: TechnologyPageSetting;
+interface Certificate {
+    id: number;
+    name: string;
+    issuing_organization: string;
+    issue_date: string;
+    expiry_date: string | null;
+    credential_id: string;
+    image: string | null;
+    order: number;
 }
 
-export default function TechnologyPageSettings({ settings }: Props) {
+interface Props {
+    settings: TechnologyPageSetting;
+    certificates: Certificate[];
+}
+
+export default function TechnologyPageSettings({ settings, certificates = [] }: Props) {
     const [bannerPreview, setBannerPreview] = useState<string | null>(null);
     const [cybersecurityPreview, setCybersecurityPreview] = useState<string | null>(null);
     const [contributionPreview, setContributionPreview] = useState<string | null>(null);
@@ -486,40 +500,138 @@ export default function TechnologyPageSettings({ settings }: Props) {
 
                         {/* Certificates Section */}
                         <Card>
-                            <CardHeader>
-                                <CardTitle>Certificates Section</CardTitle>
-                                <CardDescription>Configure the certificates section</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
+                            <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
-                                    <Label htmlFor="certificates_title">Section Title</Label>
-                                    <Input
-                                        id="certificates_title"
-                                        value={data.certificates_title}
-                                        onChange={(e) => setData("certificates_title", e.target.value)}
-                                        placeholder="Certificates"
-                                        className="mt-1"
-                                    />
+                                    <CardTitle>Certificates Section</CardTitle>
+                                    <CardDescription>Configure the certificates section and manage certificates</CardDescription>
                                 </div>
-                                <div>
-                                    <Label htmlFor="certificates_description">Section Description</Label>
-                                    <Textarea
-                                        id="certificates_description"
-                                        value={data.certificates_description}
-                                        onChange={(e) => setData("certificates_description", e.target.value)}
-                                        placeholder="Enter certificates description..."
-                                        rows={3}
-                                        className="mt-1"
-                                    />
-                                </div>
-                                <div className="flex justify-end pt-4">
-                                    <Button
-                                        type="button"
-                                        onClick={handleSubmit('certificates')}
-                                        disabled={savingSection === 'certificates'}
-                                    >
-                                        {savingSection === 'certificates' ? "Saving..." : "Save Changes"}
+                                <Link href="/admin/certificates/create">
+                                    <Button size="sm">
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        Add Certificate
                                     </Button>
+                                </Link>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                {/* Section Title & Description */}
+                                <div className="space-y-4">
+                                    <div>
+                                        <Label htmlFor="certificates_title">Section Title</Label>
+                                        <Input
+                                            id="certificates_title"
+                                            value={data.certificates_title}
+                                            onChange={(e) => setData("certificates_title", e.target.value)}
+                                            placeholder="Certificates"
+                                            className="mt-1"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="certificates_description">Section Description</Label>
+                                        <Textarea
+                                            id="certificates_description"
+                                            value={data.certificates_description}
+                                            onChange={(e) => setData("certificates_description", e.target.value)}
+                                            placeholder="Enter certificates description..."
+                                            rows={3}
+                                            className="mt-1"
+                                        />
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <Button
+                                            type="button"
+                                            onClick={handleSubmit('certificates')}
+                                            disabled={savingSection === 'certificates'}
+                                        >
+                                            {savingSection === 'certificates' ? "Saving..." : "Save Section Settings"}
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {/* Certificates List */}
+                                <div className="border-t pt-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h4 className="text-sm font-medium flex items-center gap-2">
+                                            <Award className="h-4 w-4" />
+                                            Certificates ({certificates.length})
+                                        </h4>
+                                        <Link href="/admin/certificates">
+                                            <Button variant="outline" size="sm">
+                                                <ExternalLink className="mr-2 h-4 w-4" />
+                                                Manage All
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                    
+                                    {certificates.length === 0 ? (
+                                        <div className="text-center py-8 bg-muted/50 rounded-lg">
+                                            <Award className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                                            <p className="text-muted-foreground mb-4">No certificates added yet</p>
+                                            <Link href="/admin/certificates/create">
+                                                <Button variant="outline" size="sm">
+                                                    <Plus className="mr-2 h-4 w-4" />
+                                                    Add Your First Certificate
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {certificates.slice(0, 6).map((cert) => (
+                                                <div key={cert.id} className="group relative bg-muted/50 rounded-lg p-4 hover:bg-muted transition-colors">
+                                                    <div className="flex items-start gap-3">
+                                                        {cert.image ? (
+                                                            <img 
+                                                                src={cert.image} 
+                                                                alt={cert.name}
+                                                                className="w-12 h-12 rounded object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-12 h-12 rounded bg-primary/10 flex items-center justify-center">
+                                                                <Award className="h-6 w-6 text-primary" />
+                                                            </div>
+                                                        )}
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className="font-medium text-sm truncate">{cert.name}</p>
+                                                            <p className="text-xs text-muted-foreground truncate">{cert.issuing_organization}</p>
+                                                            <p className="text-xs text-muted-foreground mt-1">
+                                                                {new Date(cert.issue_date).toLocaleDateString()}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                                                        <Link href={`/admin/certificates/${cert.id}/edit`}>
+                                                            <Button variant="ghost" size="icon" className="h-7 w-7">
+                                                                <Pencil className="h-3 w-3" />
+                                                            </Button>
+                                                        </Link>
+                                                        <Button 
+                                                            variant="ghost" 
+                                                            size="icon" 
+                                                            className="h-7 w-7 text-destructive hover:text-destructive"
+                                                            onClick={() => {
+                                                                if (confirm('Are you sure you want to delete this certificate?')) {
+                                                                    router.delete(`/admin/certificates/${cert.id}`, {
+                                                                        onSuccess: () => toast.success('Certificate deleted successfully'),
+                                                                    });
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Trash2 className="h-3 w-3" />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    
+                                    {certificates.length > 6 && (
+                                        <div className="text-center mt-4">
+                                            <Link href="/admin/certificates">
+                                                <Button variant="link" size="sm">
+                                                    View all {certificates.length} certificates →
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>

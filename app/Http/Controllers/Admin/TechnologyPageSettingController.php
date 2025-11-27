@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TechnologyPageSetting;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -16,7 +17,14 @@ class TechnologyPageSettingController extends Controller
         if (!$settings) {
             $settings = TechnologyPageSetting::create(['page_title' => 'Technology']);
         }
-        return Inertia::render('dashboard/technology-page-settings/index', ['settings' => $settings]);
+        
+        // Get certificates for display in the settings page
+        $certificates = Certificate::orderBy('order', 'asc')->orderBy('issue_date', 'desc')->get();
+        
+        return Inertia::render('dashboard/technology-page-settings/index', [
+            'settings' => $settings,
+            'certificates' => $certificates,
+        ]);
     }
 
     public function update(Request $request)
